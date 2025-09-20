@@ -94,11 +94,11 @@ playAnimationOnce(images) {
 }
 
 
-hit () {
+hit (enemy) {
    
     if (this.isDead()) return;  
     this.energy -= 5;
-  
+    this.hurtType = (enemy instanceof Jellyfish) ? 'electro' : 'poison';
     if (this.energy <= 0) {
       this.energy = 0;
       this.death = true;          // Flag setzen

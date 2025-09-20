@@ -102,7 +102,7 @@ checkCollisions() {
     this.collisionTimer = setInterval(() => {
       this.level.enemies.forEach((enemy) => {
         if (!this.character.isDead() & this.character.isColliding(enemy)) {
-            this.character.hit();
+            this.character.hit(enemy);
             this.statusBarLife.setPercentageLife(this.character.energy)
 
           console.log("Collision mit", enemy, this.character.energy)
@@ -116,9 +116,7 @@ checkCollisions() {
       this.throwableObjects.forEach((bubble) => {
         this.level.enemies.forEach((enemy) => {
   
-          // nur prüfen, wenn beide noch „aktiv“ sind
           if (!bubble.markedForRemoval && !enemy.death && bubble.isColliding(enemy)) {
-            // nur hier drin, wenn Bubble tatsächlich kollidiert
             if (bubble.isPoison) { 
               enemy.energy -= 100;
               console.log("Poison-Bubble trifft Enemy!", enemy);
@@ -126,12 +124,11 @@ checkCollisions() {
               enemy.energy -= 40;
               console.log("Normale Bubble trifft Enemy!", enemy);
             }
-            bubble.markedForRemoval = true;  // Bubble verschwindet
+            bubble.markedForRemoval = true;  
           }
         });
       });
   
-      // getroffene Bubbles aus Array löschen
       this.throwableObjects = this.throwableObjects.filter(b => !b.markedForRemoval);
   
     }, 1000 / 30);

@@ -60,6 +60,12 @@ class Character extends MovableObject {
         'img/1.Sharkie/5.Hurt/1.Poisoned/4.png',
     ]
 
+    IMAGES_HURT_ELECTRIC = [
+        'img/1.Sharkie/5.Hurt/2.Electric shock/1.png',
+        'img/1.Sharkie/5.Hurt/2.Electric shock/2.png',
+        'img/1.Sharkie/5.Hurt/2.Electric shock/3.png',
+    ]
+
     IMAGES_SLEEP = [
         'img/1.Sharkie/2.Long_IDLE/i1.png',
         'img/1.Sharkie/2.Long_IDLE/I2.png',
@@ -86,6 +92,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_SLEEP);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_HURT_ELECTRIC);
         this.offset = {
             top: 90,
             left: 35,
@@ -128,8 +135,11 @@ class Character extends MovableObject {
             }
 
             else if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-            }
+                const imgs = this.hurtType === 'electro' 
+                  ? this.IMAGES_HURT_ELECTRIC 
+                  : this.IMAGES_HURT;
+                this.playAnimation(imgs);
+              }
 
            else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_WALKING)
