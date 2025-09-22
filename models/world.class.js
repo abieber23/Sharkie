@@ -119,7 +119,7 @@ checkCollisions() {
   
           if (!bubble.markedForRemoval && !enemy.death && bubble.isColliding(enemy)) {
             if (bubble.isPoison) { 
-              enemy.energy -= 100;
+              enemy.energy -= 80;
               console.log("Poison-Bubble trifft Enemy!", enemy);
             } else {
               enemy.energy -= 40;
