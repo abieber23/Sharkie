@@ -6,6 +6,7 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
+    endbossSpawned = false; 
     statusBarLife = new StatusBar ('life', 100,20,0);
     statusBarCoin = new StatusBar ('coins', 0,20,50);
     statusBarPoison = new StatusBar ('poison', 0,20,100);
@@ -66,7 +67,7 @@ class World {
         this.addToMap(this.statusBarLife);
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarPoison);
-
+        this.checkBossSpawn();
         let self = this;
         requestAnimationFrame(function() {
             self.draw();
@@ -188,6 +189,18 @@ checkCollisions() {
       });
     }, 1000 / 10); 
   }
+  endbossSpawned = false; 
+
+  checkBossSpawn() {
+    
+    if (!this.endbossSpawned && this.character.x > this.level.level_end_x - 500) {
+      let boss = new Endboss();
+      this.level.enemies.push(boss);
+      this.endbossSpawned = true; 
+      console.log("Endboss gespawnt!");
+    }
+  }
+  
 
 
 }
