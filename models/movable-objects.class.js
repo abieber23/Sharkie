@@ -8,6 +8,7 @@ class MovableObject extends DrawableObject {
     acceleration = 0.5;
     lastHit = 0;
     Death = false;
+    contactDamage = 0
 
 
     applyGravity() {
@@ -94,17 +95,17 @@ playAnimationOnce(images) {
 }
 
 
-hit (enemy) {
+hit (enemy, dmg) {
    
     if (this.isDead()) return;  
-    this.energy -= 5;
+    this.energy -= dmg;
     this.hurtType = (enemy instanceof Jellyfish) ? 'electro' : 'poison';
     if (this.energy <= 0) {
       this.energy = 0;
-      this.death = true;          // Flag setzen
-      this.currentImage = 0;      // Dead-Animation neu starten
+      this.death = true;          
+      this.currentImage = 0;      
     } else {
-      this.lastHit = Date.now();  // Hurt-Animation triggern
+      this.lastHit = Date.now();  
     }
   }
 

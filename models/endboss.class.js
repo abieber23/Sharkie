@@ -6,6 +6,7 @@ class Endboss extends MovableObject {
     y = 0;
     x = 2500;
     energy = 200;
+    contactDamage = 20
 
     IMAGES_WALKING = [
         'img/2.Enemy/3 Final Enemy/2.floating/1.png',

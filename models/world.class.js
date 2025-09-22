@@ -101,10 +101,10 @@ class World {
 checkCollisions() {
     this.collisionTimer = setInterval(() => {
       this.level.enemies.forEach((enemy) => {
-        if (!this.character.isDead() & this.character.isColliding(enemy)) {
-            this.character.hit(enemy);
+        if (!this.character.isDead() && this.character.isColliding(enemy)) {
+            const dmg = enemy.contactDamage || 5; 
+            this.character.hit(enemy, dmg);      
             this.statusBarLife.setPercentageLife(this.character.energy)
-
           console.log("Collision mit", enemy, this.character.energy)
         }
       });
