@@ -91,19 +91,16 @@ class Endboss extends MovableObject {
 
     animate() {
         setInterval(() => {
-          // 1) Tod hat Vorrang: NUR Death abspielen
           if (this.isDead()) {
-            this.playDeathAnimation();   // ohne Parameter
-            return;                      // nichts anderes mehr zeichnen
+            this.playDeathAnimation();  
+            return;                     
           }
-    
-          // 2) Spawn einmalig abspielen
+
           if (this.spawning) {
             this.playSpawnOnce();
             return;
           }
-    
-          // 3) Normaler Loop
+
           this.playAnimation(this.IMAGES_WALKING);
         }, 150);
       }
@@ -118,7 +115,7 @@ class Endboss extends MovableObject {
         }
       }
       remove() {
-        this.markedForRemoval = true;  // World.filter(...) kann das Objekt entsorgen
+        this.markedForRemoval = true; 
       }
 
     playSpawnOnce() {

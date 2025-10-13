@@ -153,14 +153,13 @@ checkCollisions() {
             isPoison
           );
           this.throwableObjects.push(bubble);
-  
-          // Verbrauch nur beim Schießen
+
           if (isPoison) {
             let newValue = Math.max(this.statusBarPoison.percentage_poison - 20, 0);
             this.statusBarPoison.setPercentagePoison(newValue);
           }
   
-          lastThrow = now; // Cooldown setzen
+          lastThrow = now; 
         }
       }
     }, 1000 / 60);
