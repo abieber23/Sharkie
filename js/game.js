@@ -17,6 +17,7 @@ window.addEventListener('keydown', (e) => {
     if (e.code === 'ArrowUp')    keyboard.UP = true;
     if (e.code === 'ArrowDown')  keyboard.DOWN = true;
     if (e.code === 'Space')      keyboard.SPACE = true;
+    if (e.code === 'KeyD')       keyboard.ATTACK = true;
 });
 
 // Taste losgelassen → auf false setzen

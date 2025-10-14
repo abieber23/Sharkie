@@ -145,7 +145,7 @@ checkCollisions() {
         let now = Date.now();
         if (now - lastThrow > cooldown) {
           let isPoison = this.character.isPoison();
-  
+            //ANIMATION EINFÜGEN VON SHARKY
           let bubble = new ThrowableObject(
             this.character.x + 100,
             this.character.y + 75,
