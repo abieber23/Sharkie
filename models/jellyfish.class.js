@@ -25,6 +25,7 @@ class Jellyfish extends MovableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
         this.speed = 1.15 + Math.random() * 0.25;
+        this.speedY = 1.15 + Math.random() * 0.25;
         this.offset = {
             top: 5,
             left: 0,
@@ -36,21 +37,20 @@ class Jellyfish extends MovableObject {
 
 
     animateUpDown() {
-        // Bewegung hoch/runter (flüssig)
         setInterval(() => {
           if (!this.isDead()) {
-            this.moveUpDown(480); // 480 = Canvas-Höhe
+            this.moveUpDown(480); 
           }
         }, 1000 / 60);
       
-        // Animation (langsamer)
+    
         setInterval(() => {
           if (!this.isDead()) {
             this.playAnimation(this.IMAGES_WALKING);
           } else {
             this.playDeathAnimation(this.IMAGES_DEAD);
           }
-        }, 1000 / 10); // hier bleibt 100 ms
+        }, 1000 / 10); 
       }
       
      

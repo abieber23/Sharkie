@@ -8,6 +8,10 @@ class Endboss extends MovableObject {
     energy = 300;
     contactDamage = 20
     deadImageIndex = 0;
+    attacking = false;
+    attackIndex = 0;
+    attackDistance = 200;  
+    attackFrameMs = 150;   
 
     IMAGES_SPAWN = [
         'img/2.Enemy/3 Final Enemy/1.Introduce/1.png',
@@ -41,11 +45,11 @@ class Endboss extends MovableObject {
 
     IMAGES_ATTACK = [
         'img/2.Enemy/3 Final Enemy/Attack/1.png',
-        'img/2.Enemy/3 Final Enemy/Attack/1.png',
-        'img/2.Enemy/3 Final Enemy/Attack/1.png',
-        'img/2.Enemy/3 Final Enemy/Attack/1.png',
-        'img/2.Enemy/3 Final Enemy/Attack/1.png',
-        'img/2.Enemy/3 Final Enemy/Attack/1.png',
+        'img/2.Enemy/3 Final Enemy/Attack/2.png',
+        'img/2.Enemy/3 Final Enemy/Attack/3.png',
+        'img/2.Enemy/3 Final Enemy/Attack/4.png',
+        'img/2.Enemy/3 Final Enemy/Attack/5.png',
+        'img/2.Enemy/3 Final Enemy/Attack/6.png',
     ];
 
     IMAGES_HURT= [
@@ -64,7 +68,7 @@ class Endboss extends MovableObject {
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 9.png',
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 10.png',
     ]
-
+    speedY = 1.15 + Math.random() * 0.25;
     spawning = true;     
     spawnIndex = 0; 
 
@@ -76,7 +80,8 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_SPAWN);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEATH);
-
+        this.loadImages(this.IMAGES_ATTACK);
+        this.speedY = 1.15 + Math.random() * 0.25;
         this.speed = 0.15 + Math.random() * 0.25;
         this.offset = {
             top: 130,
@@ -101,9 +106,18 @@ class Endboss extends MovableObject {
             return;
           }
 
+          if (this.attacking){
+            this.playAttackStep();
+            return;
+          }
+
           this.playAnimation(this.IMAGES_WALKING);
+          console.log('los')
+          this.moveUpDown(480);
         }, 150);
       }
+
+
 
       playDeathAnimation() {
         if (this.deadImageIndex < this.IMAGES_DEATH.length) {
@@ -127,7 +141,44 @@ class Endboss extends MovableObject {
       
           this.spawning = false;
           this.currentImage = 0; 
+          this.scheduleNextAttack();
         }
+      }
+
+
+      scheduleNextAttack() {
+        if (this.isDead()) return;
+        const delay = 2000 + Math.random() * 2000;
+        this._attackTimeout = setTimeout(() => {
+          if (!this.isDead()) this.startAttack();
+        }, delay);
+      }
+
+      startAttack() {
+        if (this.spawning || this.isDead() || this.attacking) return;
+        this.attacking = true;
+        this.attackIndex = 0;
+
+      }
+
+      playAttackStep() {
+        const frames = this.IMAGES_ATTACK.length;
+        const step = this.attackDistance / frames;
+
+        if (this.attackIndex < frames) {
+          const path = this.IMAGES_ATTACK[this.attackIndex++];
+          this.img = this.imageCache[path];
+          
+          this.x -= step;
+    
+        } else {
+          this.attacking = false;
+          this.attackIndex = 0;
+          this.x += this.attackDistance;
+        this.playAnimation(this.IMAGES_WALKING);
+          this.scheduleNextAttack();
+        }
+       
       }
 
 }

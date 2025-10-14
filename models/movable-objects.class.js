@@ -49,23 +49,26 @@ class MovableObject extends DrawableObject {
     }
 
     moveUpDown(canvasHeight) {
-        // Richtung anhand von Flag speichern
         if (!this.directionY) this.directionY = 1; // 1 = runter, -1 = hoch
       
-        this.y += this.speed * this.directionY;
+        // 🔹 hier speedY statt speed verwenden (sichtbarere Bewegung)
+        if (!this.speedY) this.speedY = 2; // falls noch kein Wert gesetzt ist
       
-        // Unten angekommen → hoch schwimmen
+        this.y += this.speedY * this.directionY;
+      
+        // unten angekommen → hoch schwimmen
         if (this.y + this.height >= canvasHeight) {
-          this.y = canvasHeight - this.height; // nicht über den Rand
+          this.y = canvasHeight - this.height;
           this.directionY = -1;
         }
       
-        // Oben angekommen → runter schwimmen
+        // oben angekommen → runter schwimmen
         if (this.y <= 0) {
           this.y = 0;
           this.directionY = 1;
         }
       }
+      
 
     moveLeft (){
         this.x -= this.speed;
