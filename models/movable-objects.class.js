@@ -51,7 +51,6 @@ class MovableObject extends DrawableObject {
     moveUpDown(canvasHeight) {
         if (!this.directionY) this.directionY = 1; // 1 = runter, -1 = hoch
       
-        // 🔹 hier speedY statt speed verwenden (sichtbarere Bewegung)
         if (!this.speedY) this.speedY = 2; // falls noch kein Wert gesetzt ist
       
         this.y += this.speedY * this.directionY;

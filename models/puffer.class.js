@@ -35,7 +35,6 @@ class Puffer extends MovableObject {
 
 
     animate() {
-        // Bewegung + Walk-Animation
         setInterval(() => {
           if (!this.isDead()) {
             this.moveLeft();
@@ -43,7 +42,6 @@ class Puffer extends MovableObject {
           }
         }, 1000/ 15);
       
-        // Dead-Animation separat, alle 200ms
         setInterval(() => {
           if (this.isDead()) {
             this.playDeathAnimation(this.IMAGES_DEAD);

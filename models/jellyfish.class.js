@@ -67,7 +67,7 @@ class Jellyfish extends MovableObject {
     
       
   remove() {
-    this.markedForRemoval = true;  // World.filter(...) kann das Objekt entsorgen
+    this.markedForRemoval = true;  
   }
 
 

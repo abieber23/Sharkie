@@ -68,7 +68,6 @@ class Endboss extends MovableObject {
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 9.png',
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 10.png',
     ]
-    speedY = 1.15 + Math.random() * 0.25;
     spawning = true;     
     spawnIndex = 0; 
 
@@ -81,7 +80,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEATH);
         this.loadImages(this.IMAGES_ATTACK);
-        this.speedY = 1.15 + Math.random() * 0.25;
+        this.speedY = 3.15 + Math.random() * 2.25;
         this.speed = 0.15 + Math.random() * 0.25;
         this.offset = {
             top: 130,
@@ -113,7 +112,8 @@ class Endboss extends MovableObject {
 
           this.playAnimation(this.IMAGES_WALKING);
           console.log('los')
-          this.moveUpDown(480);
+          this.moveUpDown(540);
+          console.log('klo')
         }, 150);
       }
 
