@@ -5,6 +5,9 @@ class Character extends MovableObject {
     y = 100
     speed = 3
     lastActionTime = Date.now();
+    attackFrame = -1;
+    attackActive = false;
+
 
 
 
@@ -128,6 +131,8 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_HURT_ELECTRIC);
+        this.loadImages(this.IMAGES_ATTACK_FIN);
+
         this.offset = {
             top: 90,
             left: 35,
@@ -159,6 +164,8 @@ class Character extends MovableObject {
                 this.lastActionTime = Date.now();
             }
 
+
+
             this.world.camera_x = -this.x +50;
         },1000/60);
 
@@ -168,6 +175,17 @@ class Character extends MovableObject {
             if (this.isDead()) {
                 this.playAnimationOnce(this.IMAGES_DEAD)
             }
+
+            if (this.world.keyboard.ATTACK) {
+                this.playAnimationOnce(this.IMAGES_ATTACK_FIN);
+            
+                if (this.currentImage >= this.IMAGES_ATTACK_FIN.length) {
+                  this.currentImage = 0;
+                  this.world.keyboard.ATTACK = false; 
+                }
+            
+                return; 
+              }
 
             else if (this.isHurt()) {
                 const imgs = this.hurtType === 'electro' 
@@ -196,6 +214,9 @@ class Character extends MovableObject {
     isPoison(){
         return this.world.statusBarPoison.percentage_poison > 0
       }
+
+
+      
 
 
 }
