@@ -7,7 +7,7 @@ class Character extends MovableObject {
     lastActionTime = Date.now();
     attackFrame = -1;
     attackActive = false;
-
+    isAttacking = false;
 
 
 
@@ -177,15 +177,20 @@ class Character extends MovableObject {
             }
 
             if (this.world.keyboard.ATTACK) {
+                
                 this.playAnimationOnce(this.IMAGES_ATTACK_FIN);
-            
-                if (this.currentImage >= this.IMAGES_ATTACK_FIN.length) {
+                this.isAttacking = true;
+                // Animation dauert: 8 Frames × 100 ms = 800 ms → etwas Puffer drauf
+                setTimeout(() => {
+                  this.isAttacking = false;
+                  this.world.keyboard.ATTACK = false;
                   this.currentImage = 0;
-                  this.world.keyboard.ATTACK = false; 
-                }
-            
-                return; 
+                }, this.IMAGES_ATTACK_FIN.length * 100 + 200); // ≈ 1 s insgesamt
+              
+                return; // während der Attacke keine andere Animation
               }
+              
+            
 
             else if (this.isHurt()) {
                 const imgs = this.hurtType === 'electro' 

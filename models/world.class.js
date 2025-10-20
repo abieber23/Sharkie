@@ -103,11 +103,22 @@ checkCollisions() {
     this.collisionTimer = setInterval(() => {
       this.level.enemies.forEach((enemy) => {
         if (!this.character.isDead() && this.character.isColliding(enemy)) {
+
+            // Wenn Sharkie gerade angreift → Gegner bekommt Schaden, Sharkie bleibt unversehrt
+            if (this.character.isAttacking) {
+              enemy.energy -= 100;
+              console.log("Sharkie greift an! Gegner verliert 50 Energie:", enemy.energy);
+              if (enemy.energy <= 0) enemy.death = true; // optional falls du Todesanimationen hast
+              return;
+            }
+          
+            // normaler Schaden, wenn nicht im Angriff
             const dmg = enemy.contactDamage || 5; 
             this.character.hit(enemy, dmg);      
-            this.statusBarLife.setPercentageLife(this.character.energy)
-          console.log("Collision mit", enemy, this.character.energy)
-        }
+            this.statusBarLife.setPercentageLife(this.character.energy);
+            console.log("Collision mit", enemy, this.character.energy);
+          }
+          
       });
     }, 1000);
   }
