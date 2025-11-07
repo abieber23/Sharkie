@@ -149,32 +149,36 @@ checkCollisions() {
 
   checkThrowObjects() {
     let lastThrow = 0;
-    const cooldown = 700; // 700ms zwischen Würfen
+    const cooldown = 700; // ms zwischen Würfen
   
-    setInterval(() => {  
+    setInterval(() => {
       if (this.keyboard.SPACE) {
-        let now = Date.now();
+        const now = Date.now();
         if (now - lastThrow > cooldown) {
-          let isPoison = this.character.isPoison();
-            //ANIMATION EINFÜGEN VON SHARKY
-          let bubble = new ThrowableObject(
-            this.character.x + 100,
-            this.character.y + 75,
-            this.character.otherDirection,
-            isPoison
-          );
-          this.throwableObjects.push(bubble);
-
-          if (isPoison) {
-            let newValue = Math.max(this.statusBarPoison.percentage_poison - 20, 0);
-            this.statusBarPoison.setPercentagePoison(newValue);
-          }
+          const isPoison = this.character.isPoison();
   
-          lastThrow = now; 
+          // Mund-Animation starten; Bubble erst NACH der Animation erzeugen
+          this.character.startShoot(isPoison, () => {
+            const bubble = new ThrowableObject(
+              this.character.x + 100,
+              this.character.y + 75,
+              this.character.otherDirection,
+              isPoison
+            );
+            this.throwableObjects.push(bubble);
+  
+            if (isPoison) {
+              const newValue = Math.max(this.statusBarPoison.percentage_poison - 20, 0);
+              this.statusBarPoison.setPercentagePoison(newValue);
+            }
+          });
+  
+          lastThrow = now; // Cooldown starten, sobald die Aktion begonnen hat
         }
       }
     }, 1000 / 60);
   }
+  
 
   checkCollectableCollisions() {
     setInterval(() => {

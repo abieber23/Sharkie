@@ -8,6 +8,9 @@ class Character extends MovableObject {
     attackFrame = -1;
     attackActive = false;
     isAttacking = false;
+    isShooting = false;
+    shootImages = null;
+
 
 
 
@@ -132,6 +135,8 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_HURT_ELECTRIC);
         this.loadImages(this.IMAGES_ATTACK_FIN);
+        this.loadImages(this.IMAGES_ATTACK_NORMAL);
+        this.loadImages(this.IMAGES_ATTACK_POISON);
 
         this.offset = {
             top: 90,
@@ -180,7 +185,7 @@ class Character extends MovableObject {
                 
                 this.playAnimationOnce(this.IMAGES_ATTACK_FIN);
                 this.isAttacking = true;
-                // Animation dauert: 8 Frames × 100 ms = 800 ms → etwas Puffer drauf
+            
                 setTimeout(() => {
                   this.isAttacking = false;
                   this.world.keyboard.ATTACK = false;
@@ -190,7 +195,15 @@ class Character extends MovableObject {
                 return; // während der Attacke keine andere Animation
               }
               
+              if (this.isShooting) {
+                this.playAnimationOnce(this.shootImages);
             
+                // Wenn Frames durch sind → warten bis Timeout in startShoot() ausläuft
+                if (this.currentImage >= this.shootImages.length) {
+                  this.currentImage = 0;
+                }
+                return; // während Schießen keine Idle/Walking/Hurt Animation
+              }
 
             else if (this.isHurt()) {
                 const imgs = this.hurtType === 'electro' 
@@ -221,6 +234,22 @@ class Character extends MovableObject {
       }
 
 
+      startShoot(isPoison, onFinish) {
+        if (this.isAttacking || this.isShooting) return; 
+        this.isShooting = true;
+        this.shootImages = isPoison ? this.IMAGES_ATTACK_POISON : this.IMAGES_ATTACK_NORMAL;
+        this.currentImage = 0;
+      
+        // Zeit berechnen auf Basis deiner normalen Animationsrate (100ms)
+        const duration = this.shootImages.length * 100 + 50;
+      
+        setTimeout(() => {
+          this.isShooting = false;
+          this.currentImage = 0;
+          if (onFinish) onFinish(); // <<<< BUBBLE ERST JETZT ERZEUGEN!
+        }, duration);
+      }
+      
       
 
 

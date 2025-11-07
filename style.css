@@ -4,8 +4,16 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    text-align: right;
 }
 
 canvas {
     background-color: black;
+}
+
+
+footer {
+margin-top: 200px;
+text-align: right;
+
 }
