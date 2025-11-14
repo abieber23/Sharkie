@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sharky</title>
     <link rel="stylesheet" href="style.css">
+    <script src="js/general.js"></script>
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-objects.class.js"></script>
     <script src="models/statusbar.class.js"></script>
@@ -20,19 +21,39 @@
     <script src="models/endboss.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="js/game.js"></script>
-
+    <link rel="shortcut icon" href="img/1.Sharkie/1.IDLE/1.png" type="image/x-icon">
 </head>
 <body onload="init()">
     
 
 <h1>Sharky</h1>
 
-<canvas id="canvas" width="720px" height="480px">
 
 
+<div id="game-wrapper">
+    <canvas id="canvas" width="720" height="480"></canvas>
+  </div>
+  <div class="buttons">
+    <img src="img/6.Botones/Full Screen/Mesa de trabajo 6.png" alt="" >
+  <button class="instructions-btn" id="instructions" onclick="openModal()">INSTRUCTIONS</button>
 
-</canvas>
 
+  </div>
+  <div id="modal-overlay" onclick="overlayClick(event)">
+    <div id="modal-window">
+      <button id="modal-close" onclick="closeModal()">&times;</button>
+      <h2>Anleitung</h2>
+      <div class="moveset">
+        <img src="img/6.Botones/Key/arrow keys.png" alt="" srcset="">
+        <img src=" img/6.Botones/Tittles/Move title.png" alt="" srcset="">
+      </div>
+      <div class="moveset">
+        <img src="img/6.Botones/Key/Space Bar key.png" alt="" srcset="">
+        <img src="img/6.Botones/Key/D key.png" alt="" srcset="" style="width: 40px;">
+        <img src="img/6.Botones/Tittles/Attack tittle.png" alt="" srcset="" style="width: 150px;" >
+      </div>
+    </div>
+</div>
 <footer>
 <a href="#"> Impressum</a>
 

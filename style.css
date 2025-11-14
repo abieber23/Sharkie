@@ -4,8 +4,13 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    text-align: right;
+    background: url('img/3. Background/Backround.png') ;
+    background-size: cover;
 }
+button {
+    cursor: pointer;
+}
+
 
 canvas {
     background-color: black;
@@ -17,3 +22,98 @@ margin-top: 200px;
 text-align: right;
 
 }
+
+/* Normale Größe im Layout */
+#game-wrapper {
+    width: 720px;
+    height: 480px;
+    background: #001b2e; /* optional */
+  }
+  
+  /* Wenn im Vollbild → Wrapper füllt den Screen */
+  #game-wrapper:fullscreen,
+  #game-wrapper:-webkit-full-screen {
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  /* Canvas immer an Wrapper anpassen */
+  #game-wrapper canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    /* optional für Pixel-Optik: */
+    image-rendering: pixelated;
+  }
+  
+
+  .buttons {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .instructions-btn {
+    margin-top: 50px;
+    width: 200px;
+    border-radius: 8px;
+    height: 80px;
+    background-color: yellow;
+    color: rgb(27,20,100);
+    font-weight: bold;
+  }
+
+  #modal-overlay {
+    position: fixed;
+    inset: 0; /* top, right, bottom, left = 0 */
+    background: rgba(0, 0, 0, 0.5); /* Abdunkelung */
+    display: none; /* wird per JS auf flex gesetzt */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  /* Sichtbar-Klasse */
+  #modal-overlay.active {
+    display: flex;
+  }
+
+  /* Das eigentliche Fenster */
+  #modal-window {
+    position: relative;
+    width: 500px;
+    height: 400px;
+    background: rgb(27,20,100);
+    color:yellow;
+    text-align: center;
+    border-radius: 8px;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+
+  /* Close-Button (X) */
+  #modal-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  #modal-close:focus {
+    outline: none;
+  }
+
+  .moveset img {
+    width: 200px;
+  }
+
+  .moveset{
+    padding-bottom: 80px;
+  }
