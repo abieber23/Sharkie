@@ -1,7 +1,7 @@
 class World {
 
     character = new Character ();
-    level = level1
+    level;
     canvas;
     ctx;
     keyboard;
@@ -25,11 +25,20 @@ class World {
         new CollectableObject('poison'),
         new CollectableObject('poison')
       ];
+      gameOverImg = new Image(); 
+      tryAgainImg = new Image();
+      tryAgainButton = null;
 
     constructor (canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard= keyboard;
+        this.level = createLevel1();      // 👈 jedes Mal frisches Level
+
+        this.gameOverImg.src = 'img/6.Botones/Tittles/Game Over/Recurso 9.png';
+        this.tryAgainImg.src = 'img/6.Botones/Try again/Recurso 15.png';
+        this.canvas.addEventListener('click', () => this.handleCanvasClick());
+
         this.draw();
         this.setWorld();
         this.checkThrowObjects();
@@ -68,6 +77,11 @@ class World {
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarPoison);
         this.checkBossSpawn();
+        if (this.character.deathAnimationFinished) {
+            this.drawGameOver();
+        }
+        
+          
         let self = this;
         requestAnimationFrame(function() {
             self.draw();
@@ -216,6 +230,107 @@ checkCollisions() {
   }
   
 
+  drawGameOver() {
+    this.ctx.save();
+  
+    // dunkles Overlay
+    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  
+    const go = this.gameOverImg;
+    const ta = this.tryAgainImg;
+  
+    if (!go.complete) {
+      this.ctx.restore();
+      return;
+    }
+  
+    // Game Over zentriert zeichnen
+    let goWidth  = this.canvas.width * 0.7;
+    let goScale  = goWidth / go.width;
+    let goHeight = go.height * goScale;
+  
+    let goX = (this.canvas.width  - goWidth)  / 2;
+    let goY = (this.canvas.height - goHeight) / 2 - 40; // leicht nach oben geschoben
+  
+    this.ctx.drawImage(go, goX, goY, goWidth, goHeight);
+  
+    // Try Again Button darunter
+    if (ta.complete) {
+      let taWidth  = goWidth * 0.4;      // kleiner als Game Over
+      let taScale  = taWidth / ta.width;
+      let taHeight = ta.height * taScale;
+  
+      let taX = (this.canvas.width  - taWidth)  / 2;
+      let taY = goY + goHeight + 20;      // 20px unter dem Game-Over-Text
+  
+      this.ctx.drawImage(ta, taX, taY, taWidth, taHeight);
+  
+      // Klickfläche speichern
+      this.tryAgainButton = {
+        x: taX,
+        y: taY,
+        width: taWidth,
+        height: taHeight
+      };
+    } else {
+      this.tryAgainButton = null;
+    }
+  
+    this.ctx.restore();
+  }
+  
+  handleCanvasClick() {
+    // Nur reagieren, wenn Game Over komplett ist (Death-Animation fertig)
+    if (world.character.isDead() &&
+        world.character.currentImage >= world.character.IMAGES_DEAD.length) {
+      
+      // Spiel neu starten
+      this.restartGame();
+    }
+  }
+
+  restartGame() {
+    // Character neu erstellen
+    this.character = new Character();
+    this.character.world = this;   // ganz wichtig: Referenz zurücksetzen
+  
+    // Level zurücksetzen (so wie am Anfang – falls level1 ein globales Level-Objekt ist,
+    // kannst du es hier einfach wieder zuweisen)
+    this.level = createLevel1();
+    this.endbossSpawned = false;
+  
+    // Statusbars zurücksetzen
+    this.statusBarLife   = new StatusBar('life',   100, 20, 0);
+    this.statusBarCoin   = new StatusBar('coins',    0, 20, 50);
+    this.statusBarPoison = new StatusBar('poison',   0, 20, 100);
+  
+    // Bubbles und Collectables neu setzen
+    this.throwableObjects = [];
+    this.collectibleObject = [
+      new CollectableObject('coin'),
+      new CollectableObject('coin'),
+      new CollectableObject('coin'),
+      new CollectableObject('coin'),
+      new CollectableObject('coin'),
+      new CollectableObject('poison'),
+      new CollectableObject('poison'),
+      new CollectableObject('poison'),
+      new CollectableObject('poison'),
+      new CollectableObject('poison'),
+      new CollectableObject('poison'),
+      new CollectableObject('poison')
+    ];
+  
+    // Try-Again-Button-Hitbox zurücksetzen (falls du sie verwendest)
+    this.tryAgainButton = null;
+  
+    // Kamera wieder an den Anfang
+    this.camera_x = 0;
+  }
+  
+  
+  
 
 }
 

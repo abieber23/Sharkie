@@ -111,9 +111,9 @@ class Endboss extends MovableObject {
           }
 
           this.playAnimation(this.IMAGES_WALKING);
-          console.log('los')
+       
           this.moveUpDown(540);
-          console.log('klo')
+         
         }, 150);
       }
 

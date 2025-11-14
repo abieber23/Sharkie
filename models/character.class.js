@@ -178,7 +178,12 @@ class Character extends MovableObject {
 
         setInterval (() => {
             if (this.isDead()) {
-                this.playAnimationOnce(this.IMAGES_DEAD)
+                this.playAnimationOnce(this.IMAGES_DEAD);
+                if (this.currentImage >= this.IMAGES_DEAD.length) {
+                    this.deathAnimationFinished = true;
+                }
+            
+                return;
             }
 
             if (this.world.keyboard.ATTACK) {
