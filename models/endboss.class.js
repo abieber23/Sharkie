@@ -97,16 +97,19 @@ class Endboss extends MovableObject {
         setInterval(() => {
           if (this.isDead()) {
             this.playDeathAnimation();  
+            
             return;                     
           }
 
           if (this.spawning) {
             this.playSpawnOnce();
+            Sounds.endboss_entry.play()
             return;
           }
 
           if (this.attacking){
             this.playAttackStep();
+            Sounds.endboss_bite.play()
             return;
           }
 

@@ -155,17 +155,21 @@ class Character extends MovableObject {
 
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight()
+                Sounds.swim.play();
                 this.otherDirection = false
                 this.lastActionTime = Date.now();
             }
             if (this.world.keyboard.LEFT && this.x>0) {
                 this.moveLeft()
+                Sounds.swim.play();
                 this.otherDirection = true
                 this.lastActionTime = Date.now();
             }
 
             if (this.world.keyboard.UP && this.y > 0) {
                 this.jump();
+                Sounds.swim.play();
+
                 this.lastActionTime = Date.now();
             }
 
@@ -179,8 +183,10 @@ class Character extends MovableObject {
         setInterval (() => {
             if (this.isDead()) {
                 this.playAnimationOnce(this.IMAGES_DEAD);
+                Sounds.hurt.play();
                 if (this.currentImage >= this.IMAGES_DEAD.length) {
                     this.deathAnimationFinished = true;
+                
                 }
             
                 return;
@@ -190,19 +196,20 @@ class Character extends MovableObject {
                 
                 this.playAnimationOnce(this.IMAGES_ATTACK_FIN);
                 this.isAttacking = true;
-            
+                Sounds.slap.play();
+
                 setTimeout(() => {
                   this.isAttacking = false;
                   this.world.keyboard.ATTACK = false;
                   this.currentImage = 0;
                 }, this.IMAGES_ATTACK_FIN.length * 100 + 200); // ≈ 1 s insgesamt
-              
+                this.lastActionTime = Date.now();
                 return; // während der Attacke keine andere Animation
               }
               
               if (this.isShooting) {
                 this.playAnimationOnce(this.shootImages);
-            
+                this.lastActionTime = Date.now();
                 // Wenn Frames durch sind → warten bis Timeout in startShoot() ausläuft
                 if (this.currentImage >= this.shootImages.length) {
                   this.currentImage = 0;
@@ -215,6 +222,8 @@ class Character extends MovableObject {
                   ? this.IMAGES_HURT_ELECTRIC 
                   : this.IMAGES_HURT;
                 this.playAnimation(imgs);
+                this.lastActionTime = Date.now();
+                Sounds.hurt.play();
               }
 
            else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.isAboveGround()) {
@@ -227,9 +236,12 @@ class Character extends MovableObject {
 
     IDLE() {
         let idleTime = Date.now() - this.lastActionTime;
-        if (idleTime > 5000) {
+        if (idleTime > 7000) {
           this.playAnimation(this.IMAGES_SLEEP);
-        } else {
+          Sounds.snore.play();
+        } else { 
+            Sounds.snore.pause();
+            Sounds.snore.currentTime = 0;
           this.playAnimation(this.IMAGES_IDLE);
         }
     }

@@ -98,6 +98,7 @@ if (!this.gameStarted) {
         // Win-Bedingung: Endboss existiert & ist tot
         if (!this.gameWon && this.endboss && this.endboss.isDead()) {
           this.gameWon = true;
+          Sounds.win.play();
         }
         
         // Overlays zeichnen
@@ -105,6 +106,8 @@ if (!this.gameStarted) {
           this.drawWinScreen();
         } else if (this.character.deathAnimationFinished) {
           this.drawGameOver();
+          Sounds.gameOver.play();
+
         }
         
           
@@ -147,6 +150,7 @@ checkCollisions() {
             // Wenn Sharkie gerade angreift → Gegner bekommt Schaden, Sharkie bleibt unversehrt
             if (this.character.isAttacking) {
               enemy.energy -= 100;
+              Sounds.enemy_hurt.play();
               console.log("Sharkie greift an! Gegner verliert 50 Energie:", enemy.energy);
               if (enemy.energy <= 0) enemy.death = true; // optional falls du Todesanimationen hast
               return;
@@ -172,9 +176,11 @@ checkCollisions() {
             if (bubble.isPoison) { 
               enemy.energy -= 80;
               console.log("Poison-Bubble trifft Enemy!", enemy);
+              Sounds.enemy_hurt.play();
             } else {
               enemy.energy -= 40;
               console.log("Normale Bubble trifft Enemy!", enemy);
+              Sounds.enemy_hurt.play();
             }
             bubble.markedForRemoval = true;  
           }
@@ -206,7 +212,8 @@ checkCollisions() {
               isPoison
             );
             this.throwableObjects.push(bubble);
-  
+            Sounds.bubble.play();
+
             if (isPoison) {
               const newValue = Math.max(this.statusBarPoison.percentage_poison - 20, 0);
               this.statusBarPoison.setPercentagePoison(newValue);
@@ -229,6 +236,7 @@ checkCollisions() {
             let newValue = Math.min(this.statusBarCoin.percentage_coin + 20, 100);
             this.statusBarCoin.setPercentageCoin(newValue);
             console.log("Coin eingesammelt:", this.statusBarCoin.percentage_coin);
+            Sounds.coin.play();
 
           } 
           
