@@ -7,6 +7,7 @@ class World {
     keyboard;
     camera_x = 0;
     endbossSpawned = false; 
+    endboss = null;
     statusBarLife = new StatusBar ('life', 100,20,0);
     statusBarCoin = new StatusBar ('coins', 0,20,50);
     statusBarPoison = new StatusBar ('poison', 0,20,100);
@@ -28,15 +29,24 @@ class World {
       gameOverImg = new Image(); 
       tryAgainImg = new Image();
       tryAgainButton = null;
+      winImg = new Image();     
+      gameWon = false; 
+      startImg = new Image();
+gameStarted = false;
+startButton = null;
+
 
     constructor (canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard= keyboard;
-        this.level = createLevel1();      // 👈 jedes Mal frisches Level
+        this.level = createLevel1();     
 
         this.gameOverImg.src = 'img/6.Botones/Tittles/Game Over/Recurso 9.png';
         this.tryAgainImg.src = 'img/6.Botones/Try again/Recurso 15.png';
+        this.winImg.src = 'img/6.Botones/Tittles/You win/Recurso 22.png'; 
+        this.startImg.src = 'img/6.Botones/Start/3.png';
+
         this.canvas.addEventListener('click', () => this.handleCanvasClick());
 
         this.draw();
@@ -54,7 +64,12 @@ class World {
     }
 
     draw () {
-
+        // STARTSCREEN anzeigen, solange das Spiel noch nicht gestartet wurde
+if (!this.gameStarted) {
+    this.drawStartScreen();
+    return requestAnimationFrame(() => this.draw());
+  }
+  
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -76,9 +91,20 @@ class World {
         this.addToMap(this.statusBarLife);
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarPoison);
+    
+
         this.checkBossSpawn();
-        if (this.character.deathAnimationFinished) {
-            this.drawGameOver();
+
+        // Win-Bedingung: Endboss existiert & ist tot
+        if (!this.gameWon && this.endboss && this.endboss.isDead()) {
+          this.gameWon = true;
+        }
+        
+        // Overlays zeichnen
+        if (this.gameWon) {
+          this.drawWinScreen();
+        } else if (this.character.deathAnimationFinished) {
+          this.drawGameOver();
         }
         
           
@@ -224,6 +250,7 @@ checkCollisions() {
     if (!this.endbossSpawned && this.character.x > this.level.level_end_x - 500) {
       let boss = new Endboss();
       this.level.enemies.push(boss);
+      this.endboss = boss;     
       this.endbossSpawned = true; 
       console.log("Endboss gespawnt!");
     }
@@ -281,24 +308,51 @@ checkCollisions() {
   }
   
   handleCanvasClick() {
-    // Nur reagieren, wenn Game Over komplett ist (Death-Animation fertig)
-    if (world.character.isDead() &&
-        world.character.currentImage >= world.character.IMAGES_DEAD.length) {
-      
-      // Spiel neu starten
+
+    // STARTSCREEN geklickt?
+    if (!this.gameStarted && this.startButton) {
+  
+      this.gameStarted = true;
+      this.startButton = null;
+      this.canvas.style.cursor = 'default';
       this.restartGame();
+      return;
+    }
+  
+    // GAME OVER?
+    if (this.character.deathAnimationFinished) {
+      this.restartGame();
+      return;
+    }
+  
+    // WIN?
+    if (this.gameWon) {
+      this.restartGame();
+      return;
     }
   }
+  
+  
+  
 
   restartGame() {
     // Character neu erstellen
-    this.character = new Character();
-    this.character.world = this;   // ganz wichtig: Referenz zurücksetzen
+    this.character.energy = 100;
+    this.character.x = 120;   // Start-X (wie am Anfang)
+    this.character.y = 100;   // Start-Y (wie in Character-Klasse)
+    this.character.currentImage = 0;
+    this.character.deathAnimationFinished = false;
+    this.character.death = false;
+    this.character.lastHit = 0;
+    this.character.otherDirection = false;
+    this.character.isAttacking = false;
+    this.character.isShooting = false;  // ganz wichtig: Referenz zurücksetzen
   
     // Level zurücksetzen (so wie am Anfang – falls level1 ein globales Level-Objekt ist,
     // kannst du es hier einfach wieder zuweisen)
     this.level = createLevel1();
     this.endbossSpawned = false;
+    this.endboss = null;  
   
     // Statusbars zurücksetzen
     this.statusBarLife   = new StatusBar('life',   100, 20, 0);
@@ -327,8 +381,87 @@ checkCollisions() {
   
     // Kamera wieder an den Anfang
     this.camera_x = 0;
+    this.gameWon = false;  
   }
   
+  
+  drawWinScreen() {
+    this.ctx.save();
+  
+    // dunkles Overlay
+    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  
+    const win = this.winImg;
+    const ta  = this.tryAgainImg;
+  
+    if (!win.complete) {
+      this.ctx.restore();
+      return;
+    }
+  
+    // "You win" zentriert zeichnen
+    let winWidth  = this.canvas.width * 0.7;
+    let winScale  = winWidth / win.width;
+    let winHeight = win.height * winScale;
+  
+    let winX = (this.canvas.width  - winWidth)  / 2;
+    let winY = (this.canvas.height - winHeight) / 2 - 40;
+  
+    this.ctx.drawImage(win, winX, winY, winWidth, winHeight);
+  
+    // Try Again darunter
+    if (ta.complete) {
+      let taWidth  = winWidth * 0.4;
+      let taScale  = taWidth / ta.width;
+      let taHeight = ta.height * taScale;
+  
+      let taX = (this.canvas.width  - taWidth)  / 2;
+      let taY = winY + winHeight + 20;
+  
+      this.ctx.drawImage(ta, taX, taY, taWidth, taHeight);
+  
+      // Klickbereich für Restart
+      this.tryAgainButton = {
+        x: taX,
+        y: taY,
+        width: taWidth,
+        height: taHeight
+      };
+    } else {
+      this.tryAgainButton = null;
+    }
+
+    this.ctx.restore();
+  }
+
+  drawStartScreen() {
+    this.ctx.save();
+  
+    // Schwarzer Hintergrund
+    this.ctx.fillStyle = 'black';
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  
+    const img = this.startImg;
+  
+    if (img.complete) {
+      // Größe skalieren
+      let width  = this.canvas.width * 0.6;
+      let scale  = width / img.width;
+      let height = img.height * scale;
+  
+      let x = (this.canvas.width  - width)  / 2;
+      let y = (this.canvas.height - height) / 2;
+  
+      this.ctx.drawImage(img, x, y, width, height);
+  
+      // Klickfläche speichern
+      this.startButton = { x, y, width, height };
+    }
+  
+    this.canvas.style.cursor = 'pointer';
+    this.ctx.restore();
+  }
   
   
 
