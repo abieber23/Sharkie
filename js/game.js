@@ -18,6 +18,8 @@ window.addEventListener('keydown', (e) => {
     if (e.code === 'ArrowDown')  keyboard.DOWN = true;
     if (e.code === 'Space')      keyboard.SPACE = true;
     if (e.code === 'KeyD')       keyboard.ATTACK = true;
+    if (e.code === "KeyP")       ;
+
 });
 
 // Taste losgelassen → auf false setzen
@@ -27,4 +29,6 @@ window.addEventListener('keyup', (e) => {
     if (e.code === 'ArrowUp')    keyboard.UP = false;
     if (e.code === 'ArrowDown')  keyboard.DOWN = false;
     if (e.code === 'Space')      keyboard.SPACE = false;
+    if (e.code === "KeyP")      world.togglePause();
+
 });

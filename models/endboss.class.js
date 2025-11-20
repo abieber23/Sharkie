@@ -97,7 +97,7 @@ class Endboss extends MovableObject {
         setInterval(() => {
           if (this.isDead()) {
             this.playDeathAnimation();  
-            
+            this.attacking = false;
             return;                     
           }
 
@@ -109,7 +109,6 @@ class Endboss extends MovableObject {
 
           if (this.attacking){
             this.playAttackStep();
-            Sounds.endboss_bite.play()
             return;
           }
 

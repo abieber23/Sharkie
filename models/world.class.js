@@ -34,6 +34,8 @@ class World {
       startImg = new Image();
 gameStarted = false;
 startButton = null;
+isPaused = true;
+
 
 
     constructor (canvas, keyboard) {
@@ -106,10 +108,12 @@ if (!this.gameStarted) {
           this.drawWinScreen();
         } else if (this.character.deathAnimationFinished) {
           this.drawGameOver();
-          Sounds.gameOver.play();
 
         }
         
+        if (this.keyboard.PAUSE) {
+            this.togglePause();
+        }
           
         let self = this;
         requestAnimationFrame(function() {
@@ -141,9 +145,22 @@ if (!this.gameStarted) {
     }
 }
 
+togglePause() {
+    this.isPaused = !this.isPaused;
+    console.log('pause');
+    if (this.isPaused) {
+        // Alle Sounds pausieren
+        for (let s in Sounds) {
+            Sounds[s].pause();
+        }
+    }
+}
+
 
 checkCollisions() {
+    
     this.collisionTimer = setInterval(() => {
+        if (this.isPaused) return; 
       this.level.enemies.forEach((enemy) => {
         if (!this.character.isDead() && this.character.isColliding(enemy)) {
 
@@ -170,6 +187,7 @@ checkCollisions() {
   checkProjectileCollisions() {
     setInterval(() => {
       this.throwableObjects.forEach((bubble) => {
+        if (this.isPaused) return; 
         this.level.enemies.forEach((enemy) => {
   
           if (!bubble.markedForRemoval && !enemy.death && bubble.isColliding(enemy)) {
@@ -194,10 +212,12 @@ checkCollisions() {
   
 
   checkThrowObjects() {
+   
     let lastThrow = 0;
     const cooldown = 700; // ms zwischen Würfen
   
     setInterval(() => {
+        if (this.isPaused) return; 
       if (this.keyboard.SPACE) {
         const now = Date.now();
         if (now - lastThrow > cooldown) {
@@ -229,6 +249,7 @@ checkCollisions() {
 
   checkCollectableCollisions() {
     setInterval(() => {
+        if (this.isPaused) return; 
       this.collectibleObject.forEach((item, index) => {
         if (this.character.isColliding(item)) {
           
@@ -254,7 +275,7 @@ checkCollisions() {
   endbossSpawned = false; 
 
   checkBossSpawn() {
-    
+    if (this.isPaused) return; 
     if (!this.endbossSpawned && this.character.x > this.level.level_end_x - 500) {
       let boss = new Endboss();
       this.level.enemies.push(boss);
@@ -271,10 +292,9 @@ checkCollisions() {
     // dunkles Overlay
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-  
+    this.isPaused = true;
     const go = this.gameOverImg;
     const ta = this.tryAgainImg;
-  
     if (!go.complete) {
       this.ctx.restore();
       return;
@@ -355,7 +375,8 @@ checkCollisions() {
     this.character.otherDirection = false;
     this.character.isAttacking = false;
     this.character.isShooting = false;  // ganz wichtig: Referenz zurücksetzen
-  
+   this.isPaused = false;
+    this.character.lastActionTime = Date.now();
     // Level zurücksetzen (so wie am Anfang – falls level1 ein globales Level-Objekt ist,
     // kannst du es hier einfach wieder zuweisen)
     this.level = createLevel1();
@@ -395,7 +416,8 @@ checkCollisions() {
   
   drawWinScreen() {
     this.ctx.save();
-  
+    this.isPaused = true;
+
     // dunkles Overlay
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -449,7 +471,8 @@ checkCollisions() {
     // Schwarzer Hintergrund
     this.ctx.fillStyle = 'black';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-  
+    this.isPaused = true;
+
     const img = this.startImg;
   
     if (img.complete) {

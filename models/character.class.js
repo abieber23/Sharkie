@@ -151,6 +151,7 @@ class Character extends MovableObject {
     animate () {
 
         setInterval(()=> {
+            if (this.world.isPaused) return; 
             if (this.isDead()) return;
 
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -181,9 +182,11 @@ class Character extends MovableObject {
 
 
         setInterval (() => {
+            if (this.world.isPaused) return; 
             if (this.isDead()) {
                 this.playAnimationOnce(this.IMAGES_DEAD);
                 Sounds.hurt.play();
+                Sounds.gameOver.play();
                 if (this.currentImage >= this.IMAGES_DEAD.length) {
                     this.deathAnimationFinished = true;
                 
@@ -236,7 +239,7 @@ class Character extends MovableObject {
 
     IDLE() {
         let idleTime = Date.now() - this.lastActionTime;
-        if (idleTime > 7000) {
+        if (idleTime > 10000) {
           this.playAnimation(this.IMAGES_SLEEP);
           Sounds.snore.play();
         } else { 
