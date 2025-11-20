@@ -34,7 +34,7 @@ class World {
       startImg = new Image();
 gameStarted = false;
 startButton = null;
-isPaused = true;
+isPaused = false;
 
 
 
@@ -42,7 +42,15 @@ isPaused = true;
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard= keyboard;
-        this.level = createLevel1();     
+        this.level = createLevel1();    
+        // Gegnern world zuweisen + Animation starten
+        this.level.enemies.forEach(e => {
+            e.world = this;
+            if (e.startBehavior) e.startBehavior();
+        });
+        
+
+ 
 
         this.gameOverImg.src = 'img/6.Botones/Tittles/Game Over/Recurso 9.png';
         this.tryAgainImg.src = 'img/6.Botones/Try again/Recurso 15.png';
@@ -200,6 +208,12 @@ checkCollisions() {
               console.log("Normale Bubble trifft Enemy!", enemy);
               Sounds.enemy_hurt.play();
             }
+
+            if (enemy instanceof Endboss) {
+                enemy.isHurtAnimation = true;
+                enemy.hurtFrame = 0;
+            }
+            
             bubble.markedForRemoval = true;  
           }
         });
@@ -411,6 +425,12 @@ checkCollisions() {
     // Kamera wieder an den Anfang
     this.camera_x = 0;
     this.gameWon = false;  
+    // Gegner neue world zuweisen und Verhalten starten
+this.level.enemies.forEach(e => {
+    e.world = this;
+    if (e.startBehavior) e.startBehavior();
+});
+
   }
   
   

@@ -32,26 +32,44 @@ class Jellyfish extends MovableObject {
             right: 0,
             bottom: 25
           };
-        this.animateUpDown() 
+
+    
+        
     } 
 
 
-    animateUpDown() {
-        setInterval(() => {
-          if (!this.isDead()) {
-            this.moveUpDown(480); 
-          }
-        }, 1000 / 60);
+    startBehavior() {
+      // HIER starten die Intervalle, denn jetzt ist e.world gesetzt
+      this.moveInterval = setInterval(() => {
+          if (this.world?.isPaused) return;
+          this.moveUpDown(480);
+      }, 1000/60);
+  
+      this.animationInterval = setInterval(() => {
+          if (this.world?.isPaused) return;
+          if (!this.isDead()) this.playAnimation(this.IMAGES_WALKING);
+      }, 100);
+  }
+
+    // animateUpDown() {
+    //     setInterval(() => {
+         
+    //       if (this.world && this.world.isPaused) return;
+
+    //       if (!this.isDead()) {
+    //         this.moveUpDown(480); 
+    //       }
+    //     }, 1000 / 60);
       
     
-        setInterval(() => {
-          if (!this.isDead()) {
-            this.playAnimation(this.IMAGES_WALKING);
-          } else {
-            this.playDeathAnimation(this.IMAGES_DEAD);
-          }
-        }, 1000 / 10); 
-      }
+    //     setInterval(() => {
+    //       if (!this.isDead()) {
+    //         this.playAnimation(this.IMAGES_WALKING);
+    //       } else {
+    //         this.playDeathAnimation(this.IMAGES_DEAD);
+    //       }
+    //     }, 1000 / 10); 
+    //   }
       
      
 

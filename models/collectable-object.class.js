@@ -41,6 +41,7 @@ class CollectableObject extends MovableObject {
 
 
     animateCollect () {
+        
         if (this.type === 'coin') {
             setInterval(() => {
                 this.playAnimation(this.IMAGES_COIN);

@@ -12,6 +12,7 @@ class Endboss extends MovableObject {
     attackIndex = 0;
     attackDistance = 200;  
     attackFrameMs = 150;   
+    isHurtAnimation = false;
 
     IMAGES_SPAWN = [
         'img/2.Enemy/3 Final Enemy/1.Introduce/1.png',
@@ -101,6 +102,12 @@ class Endboss extends MovableObject {
             return;                     
           }
 
+          if (this.isHurtAnimation) {
+            this.playHurtOnce()
+
+            return;
+          }
+
           if (this.spawning) {
             this.playSpawnOnce();
             Sounds.endboss_entry.play()
@@ -119,7 +126,19 @@ class Endboss extends MovableObject {
         }, 150);
       }
 
-
+      playHurtOnce() {
+        // if (!this.isHurtAnimating) return;
+    
+        if (this.hurtFrame < this.IMAGES_HURT.length) {
+            const path = this.IMAGES_HURT[this.hurtFrame];
+            this.img = this.imageCache[path];
+            this.hurtFrame++;
+        } else {
+            this.isHurtAnimation = false; // fertig
+            this.hurtFrame = 0;
+        }
+    }
+    
 
       playDeathAnimation() {
         if (this.deadImageIndex < this.IMAGES_DEATH.length) {
