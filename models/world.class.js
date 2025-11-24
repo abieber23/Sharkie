@@ -35,6 +35,7 @@ class World {
 gameStarted = false;
 startButton = null;
 isPaused = false;
+backgroundPlaying = false;
 
 
 
@@ -302,7 +303,8 @@ checkCollisions() {
 
   drawGameOver() {
     this.ctx.save();
-  
+    this.stopBackgroundSound();
+
     // dunkles Overlay
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -345,7 +347,7 @@ checkCollisions() {
     } else {
       this.tryAgainButton = null;
     }
-  
+    this.canvas.style.cursor = 'pointer';
     this.ctx.restore();
   }
   
@@ -358,6 +360,8 @@ checkCollisions() {
       this.startButton = null;
       this.canvas.style.cursor = 'default';
       this.restartGame();
+      this.playBackgroundSound();
+
       return;
     }
   
@@ -425,11 +429,14 @@ checkCollisions() {
     // Kamera wieder an den Anfang
     this.camera_x = 0;
     this.gameWon = false;  
+    this.backgroundPlaying = false;
+
     // Gegner neue world zuweisen und Verhalten starten
 this.level.enemies.forEach(e => {
     e.world = this;
     if (e.startBehavior) e.startBehavior();
 });
+this.playBackgroundSound();
 
   }
   
@@ -437,6 +444,7 @@ this.level.enemies.forEach(e => {
   drawWinScreen() {
     this.ctx.save();
     this.isPaused = true;
+    this.stopBackgroundSound();
 
     // dunkles Overlay
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
@@ -481,7 +489,7 @@ this.level.enemies.forEach(e => {
     } else {
       this.tryAgainButton = null;
     }
-
+    this.canvas.style.cursor = 'pointer';
     this.ctx.restore();
   }
 
@@ -525,8 +533,22 @@ this.level.enemies.forEach(e => {
 
 }
   
-
+playBackgroundSound() {
+    if (!this.backgroundPlaying) {
+        Sounds.background.currentTime = 0;
+        Sounds.background.play();
+        this.backgroundPlaying = true;
+    }
 }
+
+stopBackgroundSound() {
+    if (this.backgroundPlaying) {
+        Sounds.background.pause();
+        this.backgroundPlaying = false;
+    }
+}
+}
+
 
 
 

@@ -11,4 +11,8 @@ const Sounds = {
     endboss_entry:       new Audio('audio/evil-laugh-with-reverb-423668.mp3'),
     endboss_bite:       new Audio('audio/cartoon-bite-39234.mp3'),
     endboss_death:      new Audio('audio/zombie-death-2-95167.mp3'),
+    background:  new Audio ('audio/backround.mp3')
 };
+
+Sounds.background.loop = true;
+Sounds.background.volume = 0.35;
