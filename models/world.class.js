@@ -514,6 +514,16 @@ this.level.enemies.forEach(e => {
     this.ctx.restore();
   }
   
+
+  toggleMute() {
+    this.isMuted = !this.isMuted;  
+
+    for (let key in Sounds) {
+        Sounds[key].muted = this.isMuted;
+    }
+
+
+}
   
 
 }

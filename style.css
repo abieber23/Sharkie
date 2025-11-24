@@ -124,3 +124,14 @@ text-align: right;
   canvas.try-again-hover {
     cursor: pointer; /* beim drüberfahren */
 }
+
+.mute-button {
+
+  width: 100px;
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+.d-none {
+  display: none;
+}

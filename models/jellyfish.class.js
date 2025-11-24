@@ -48,6 +48,9 @@ class Jellyfish extends MovableObject {
       this.animationInterval = setInterval(() => {
           if (this.world?.isPaused) return;
           if (!this.isDead()) this.playAnimation(this.IMAGES_WALKING);
+          else {
+                    this.playDeathAnimation(this.IMAGES_DEAD);
+                  }
       }, 100);
   }
 

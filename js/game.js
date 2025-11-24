@@ -12,6 +12,10 @@ console.log ('My Charakter is', world.character)
 
 
 window.addEventListener('keydown', (e) => {
+
+    if (e.code === "Space" || e.code === "ArrowUp" || e.code === "ArrowDown") {
+        e.preventDefault(); // verhindert Scrollen
+    }
     if (e.code === 'ArrowLeft')  keyboard.LEFT = true;
     if (e.code === 'ArrowRight') keyboard.RIGHT = true;
     if (e.code === 'ArrowUp')    keyboard.UP = true;
@@ -32,3 +36,4 @@ window.addEventListener('keyup', (e) => {
     if (e.code === "KeyP")      world.togglePause();
 
 });
+
