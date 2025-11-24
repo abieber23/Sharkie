@@ -15,6 +15,13 @@ body {
     background: url('img/3. Background/Backround.png') ;
     background-size: cover;
 }
+
+html {
+  margin: 0;
+  padding: 0;
+
+  height: 100%;
+}
 button {
     cursor: pointer;
 }
@@ -160,4 +167,57 @@ text-align: right;
 }
 .fullscreen-hint.show {
   opacity: 1;
+}
+
+/* Overlay für Hochformat (nur mobile) */
+#rotate-device {
+  position: fixed;
+  inset: 0;
+  background: black;
+  color: white;
+  display: none;           /* per JS auf flex gesetzt */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 32px;
+  z-index: 10000;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Mobile-Touch-Controls – standardmäßig aus */
+#mobile-controls {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  display: none;        /* nur auf kleinen Screens sichtbar */
+  justify-content: center;
+  gap: 12px;
+  z-index: 5000;
+}
+
+#mobile-controls button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  font-size: 24px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+}
+
+/* Auf kleinen Screens im Querformat Mobile-Buttons einblenden */
+@media (max-width: 900px) and (orientation: landscape) {
+  #mobile-controls {
+    display: flex;
+  }
+}
+
+/* Buttons etwas kleiner auf sehr kleinen Geräten */
+@media (max-width: 600px) and (orientation: landscape) {
+  #mobile-controls button {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
 }
