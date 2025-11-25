@@ -27,12 +27,12 @@ class CollectableObject extends MovableObject {
         this.loadImages(this.IMAGES_POISON);
 
         if (this.type === 'coin') {
-            this.loadImage(this.IMAGES_COIN[0]); // Startbild setzen
+            this.loadImage(this.IMAGES_COIN[0]); 
           } else {
             this.loadImage(this.IMAGES_POISON[0]);
           }
 
-          this.x = 100 + Math.random() * 2000; // Zufallsposition
+          this.x = 100 + Math.random() * 2000; 
           this.y = 100 + Math.random() * 300;
         this.height = 50;
         this.width = 50;

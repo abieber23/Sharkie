@@ -31,11 +31,10 @@ percentage_life = 100;
 percentage_coin = 0;
 percentage_poison = 0;
 
-type = 'life';        // 'life' | 'coins' | 'poison'
+type = 'life';      
 
 constructor(type , start , x , y ) {
   super();
-  // Alle Bilder einmal laden (so wie du es wolltest)
   this.type = type;
 
   this.loadImages(this.IMAGES_LIFE);
@@ -47,7 +46,6 @@ constructor(type , start , x , y ) {
   this.width = 250;
   this.height = 80;
 
-  // Typ setzen
   if (this.type === 'life')   this.setPercentageLife(start);
   if (this.type === 'coins')  this.setPercentageCoin(start);
   if (this.type === 'poison') this.setPercentagePoison(start); // Startwert setzen
@@ -74,7 +72,6 @@ setPercentagePoison (percentage){
 
 
 resolveImageIndex (percentage){
-
     if (percentage == 100) { 
         return 5;
     } else if (percentage >= 80) {
@@ -88,7 +85,6 @@ resolveImageIndex (percentage){
     } else {
         return 0;
     }
-
 }
 
 }

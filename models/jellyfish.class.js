@@ -39,12 +39,11 @@ class Jellyfish extends MovableObject {
 
 
     startBehavior() {
-      // HIER starten die Intervalle, denn jetzt ist e.world gesetzt
       this.moveInterval = setInterval(() => {
           if (this.world?.isPaused) return;
           this.moveUpDown(480);
       }, 1000/60);
-  
+      
       this.animationInterval = setInterval(() => {
           if (this.world?.isPaused) return;
           if (!this.isDead()) this.playAnimation(this.IMAGES_WALKING);
@@ -53,29 +52,8 @@ class Jellyfish extends MovableObject {
                   }
       }, 100);
   }
-
-    // animateUpDown() {
-    //     setInterval(() => {
-         
-    //       if (this.world && this.world.isPaused) return;
-
-    //       if (!this.isDead()) {
-    //         this.moveUpDown(480); 
-    //       }
-    //     }, 1000 / 60);
       
     
-    //     setInterval(() => {
-    //       if (!this.isDead()) {
-    //         this.playAnimation(this.IMAGES_WALKING);
-    //       } else {
-    //         this.playDeathAnimation(this.IMAGES_DEAD);
-    //       }
-    //     }, 1000 / 10); 
-    //   }
-      
-     
-
       playDeathAnimation() {
         if (this.deadImageIndex < this.IMAGES_DEAD.length) {
           const path = this.IMAGES_DEAD[this.deadImageIndex];

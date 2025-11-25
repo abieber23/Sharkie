@@ -1,5 +1,4 @@
 class Character extends MovableObject {
-
     height = 180
     width = 180
     y = 100
@@ -10,10 +9,6 @@ class Character extends MovableObject {
     isAttacking = false;
     isShooting = false;
     shootImages = null;
-
-
-
-
     IMAGES_WALKING = [
         'img/1.Sharkie/3.Swim/1.png',
         'img/1.Sharkie/3.Swim/2.png',
@@ -22,7 +17,6 @@ class Character extends MovableObject {
         'img/1.Sharkie/3.Swim/5.png',
         'img/1.Sharkie/3.Swim/6.png',
     ];
-
     IMAGES_IDLE = [
         'img/1.Sharkie/1.IDLE/1.png',
         'img/1.Sharkie/1.IDLE/2.png',
@@ -43,7 +37,6 @@ class Character extends MovableObject {
         'img/1.Sharkie/1.IDLE/17.png',
         'img/1.Sharkie/1.IDLE/18.png',
     ];
-
     IMAGES_DEAD = [
         'img/1.Sharkie/6.dead/1.Poisoned/1.png',
         'img/1.Sharkie/6.dead/1.Poisoned/2.png',
@@ -58,20 +51,17 @@ class Character extends MovableObject {
         'img/1.Sharkie/6.dead/1.Poisoned/11.png',
         'img/1.Sharkie/6.dead/1.Poisoned/12.png',
     ]
-
     IMAGES_HURT = [
         'img/1.Sharkie/5.Hurt/1.Poisoned/1.png',
         'img/1.Sharkie/5.Hurt/1.Poisoned/2.png',
         'img/1.Sharkie/5.Hurt/1.Poisoned/3.png',
         'img/1.Sharkie/5.Hurt/1.Poisoned/4.png',
     ]
-
     IMAGES_HURT_ELECTRIC = [
         'img/1.Sharkie/5.Hurt/2.Electric shock/1.png',
         'img/1.Sharkie/5.Hurt/2.Electric shock/2.png',
         'img/1.Sharkie/5.Hurt/2.Electric shock/3.png',
     ]
-
     IMAGES_SLEEP = [
         'img/1.Sharkie/2.Long_IDLE/i1.png',
         'img/1.Sharkie/2.Long_IDLE/I2.png',
@@ -88,8 +78,6 @@ class Character extends MovableObject {
         'img/1.Sharkie/2.Long_IDLE/I13.png',
         'img/1.Sharkie/2.Long_IDLE/I14.png',
     ]
-
-
     IMAGES_ATTACK_NORMAL = [
         
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/1.png',
@@ -101,7 +89,6 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/7.png',
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/8.png',
     ]
-
     IMAGES_ATTACK_POISON = [
         'img/1.Sharkie/4.Attack/Bubble trap/For Whale/1.png',
         'img/1.Sharkie/4.Attack/Bubble trap/For Whale/2.png',
@@ -112,7 +99,6 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png',
         'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png',
     ]
-
     IMAGES_ATTACK_FIN = [
         'img/1.Sharkie/4.Attack/Fin slap/1.png',
         'img/1.Sharkie/4.Attack/Fin slap/2.png',
@@ -123,7 +109,6 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Fin slap/7.png',
         'img/1.Sharkie/4.Attack/Fin slap/8.png',
     ]
-
     world;
 
     constructor () {
@@ -148,94 +133,109 @@ class Character extends MovableObject {
         this.animate ();
     }
 
+    handleMovement() {
+        this.handleRightMovement();
+        this.handleLeftMovement();
+        this.handleJump();
+    }
+    
+    handleRightMovement() {
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            this.moveRight();
+            Sounds.swim.play();
+            this.otherDirection = false;
+            this.lastActionTime = Date.now();
+        }
+    }
+    
+    handleLeftMovement() {
+        if (this.world.keyboard.LEFT && this.x > 0) {
+            this.moveLeft();
+            Sounds.swim.play();
+            this.otherDirection = true;
+            this.lastActionTime = Date.now();
+        }
+    }
+    
+    handleJump() {
+        if (this.world.keyboard.UP && this.y > 0) {
+            this.jump();
+            Sounds.swim.play();
+            this.lastActionTime = Date.now();
+        }
+    }
+    
+    updateCamera() {
+        this.world.camera_x = -this.x + 50;
+    }
+    
     animate () {
-
         setInterval(()=> {
             if (this.world.isPaused) return; 
             if (this.isDead()) return;
-
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.moveRight()
-                Sounds.swim.play();
-                this.otherDirection = false
-                this.lastActionTime = Date.now();
-            }
-            if (this.world.keyboard.LEFT && this.x>0) {
-                this.moveLeft()
-                Sounds.swim.play();
-                this.otherDirection = true
-                this.lastActionTime = Date.now();
-            }
-
-            if (this.world.keyboard.UP && this.y > 0) {
-                this.jump();
-                Sounds.swim.play();
-
-                this.lastActionTime = Date.now();
-            }
-
-
-
-            this.world.camera_x = -this.x +50;
+            this.handleMovement();
+            this.updateCamera();
         },1000/60);
-
-
-
         setInterval (() => {
             if (this.world.isPaused) return; 
-            if (this.isDead()) {
-                this.playAnimationOnce(this.IMAGES_DEAD);
-                Sounds.hurt.play();
-                Sounds.gameOver.play();
-                if (this.currentImage >= this.IMAGES_DEAD.length) {
-                    this.deathAnimationFinished = true;
-                
-                }
-            
-                return;
-            }
-
-            if (this.world.keyboard.ATTACK) {
-                
-                this.playAnimationOnce(this.IMAGES_ATTACK_FIN);
-                this.isAttacking = true;
-                Sounds.slap.play();
-
-                setTimeout(() => {
-                  this.isAttacking = false;
-                  this.world.keyboard.ATTACK = false;
-                  this.currentImage = 0;
-                }, this.IMAGES_ATTACK_FIN.length * 100 + 200); // ≈ 1 s insgesamt
-                this.lastActionTime = Date.now();
-                return; // während der Attacke keine andere Animation
-              }
-              
-              if (this.isShooting) {
-                this.playAnimationOnce(this.shootImages);
-                this.lastActionTime = Date.now();
-                // Wenn Frames durch sind → warten bis Timeout in startShoot() ausläuft
-                if (this.currentImage >= this.shootImages.length) {
-                  this.currentImage = 0;
-                }
-                return; // während Schießen keine Idle/Walking/Hurt Animation
-              }
-
-            else if (this.isHurt()) {
-                const imgs = this.hurtType === 'electro' 
-                  ? this.IMAGES_HURT_ELECTRIC 
-                  : this.IMAGES_HURT;
-                this.playAnimation(imgs);
-                this.lastActionTime = Date.now();
-                Sounds.hurt.play();
-              }
-
+            if (this.handleDeath()) return;
+            if (this.handleFinSlap()) return;
+            if (this.handleShooting()) return;
+            if (this.handleHurt()) return;
            else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_WALKING)
-
     }
     else this.IDLE()
     },100);
     }
+
+    handleHurt() {
+        if (!this.isHurt()) return false;
+        const imgs = this.hurtType === 'electro'
+            ? this.IMAGES_HURT_ELECTRIC
+            : this.IMAGES_HURT;
+        this.playAnimation(imgs);
+        this.lastActionTime = Date.now();
+        Sounds.hurt.play();
+        return true; 
+    }
+    
+
+    handleDeath() {
+        if (!this.isDead()) return false;
+        this.playAnimationOnce(this.IMAGES_DEAD);
+        Sounds.hurt.play();
+        Sounds.gameOver.play();
+        if (this.currentImage >= this.IMAGES_DEAD.length) {
+            this.deathAnimationFinished = true;
+        }
+        return true; 
+    }
+
+    handleFinSlap() {
+        if (!this.world.keyboard.ATTACK) return false;
+        this.playAnimationOnce(this.IMAGES_ATTACK_FIN);
+        this.isAttacking = true;
+        Sounds.slap.play();
+        setTimeout(() => {
+            this.isAttacking = false;
+            this.world.keyboard.ATTACK = false;
+            this.currentImage = 0;
+        }, this.IMAGES_ATTACK_FIN.length * 100 + 200);
+        this.lastActionTime = Date.now();
+        return true;
+    }
+    
+    handleShooting() {
+        if (!this.isShooting) return false 
+            this.playAnimationOnce(this.shootImages);
+            this.lastActionTime = Date.now();
+            if (this.currentImage >= this.shootImages.length) {
+              this.currentImage = 0;
+            }
+            return true;
+    }
+
 
     IDLE() {
         let idleTime = Date.now() - this.lastActionTime;
@@ -259,14 +259,11 @@ class Character extends MovableObject {
         this.isShooting = true;
         this.shootImages = isPoison ? this.IMAGES_ATTACK_POISON : this.IMAGES_ATTACK_NORMAL;
         this.currentImage = 0;
-      
-        // Zeit berechnen auf Basis deiner normalen Animationsrate (100ms)
         const duration = this.shootImages.length * 100 + 50;
-      
         setTimeout(() => {
           this.isShooting = false;
           this.currentImage = 0;
-          if (onFinish) onFinish(); // <<<< BUBBLE ERST JETZT ERZEUGEN!
+          if (onFinish) onFinish(); 
         }, duration);
       }
       

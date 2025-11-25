@@ -39,7 +39,6 @@ class DrawableObject {
     }
 
     drawFrame (ctx) {
-
         if (this instanceof Character || this instanceof Puffer || this instanceof Endboss || this instanceof ThrowableObject || this instanceof CollectableObject) {
             ctx.beginPath();
             ctx.lineWidth = "2";
@@ -50,6 +49,5 @@ class DrawableObject {
                 this.height - this.offset.top - this.offset.bottom);
             ctx.stroke();
         }
-
     }
 }

@@ -34,17 +34,13 @@ class Puffer extends MovableObject {
 
 
     startBehavior() {
-      // Bewegung + Swim-Animation
       this.moveAnimInterval = setInterval(() => {
         if (this.world?.isPaused) return;
-    
         if (!this.isDead()) {
           this.moveLeft();
           this.playAnimation(this.IMAGES_WALKING);
         }
-      }, 1000 / 15);  // wie vorher in animate()
-    
-      // Death-Animation separat
+      }, 1000 / 15); 
       this.deathInterval = setInterval(() => {
         if (this.world?.isPaused) return;
     
@@ -54,10 +50,6 @@ class Puffer extends MovableObject {
       }, 200);
     }
     
-      
-     
-    
-
 
       playDeathAnimation() {
         if (this.deadImageIndex < this.IMAGES_DEAD.length) {
@@ -71,7 +63,7 @@ class Puffer extends MovableObject {
     
       
   remove() {
-    this.markedForRemoval = true;  // World.filter(...) kann das Objekt entsorgen
+    this.markedForRemoval = true;  
   }
 
 }

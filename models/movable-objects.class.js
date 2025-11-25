@@ -49,19 +49,13 @@ class MovableObject extends DrawableObject {
     }
 
     moveUpDown(canvasHeight) {
-        if (!this.directionY) this.directionY = 1; // 1 = runter, -1 = hoch
-      
-        if (!this.speedY) this.speedY = 2; // falls noch kein Wert gesetzt ist
-      
+        if (!this.directionY) this.directionY = 1; 
+        if (!this.speedY) this.speedY = 2; 
         this.y += this.speedY * this.directionY;
-      
-        // unten angekommen → hoch schwimmen
         if (this.y + this.height >= canvasHeight) {
           this.y = canvasHeight - this.height;
           this.directionY = -1;
         }
-      
-        // oben angekommen → runter schwimmen
         if (this.y <= 0) {
           this.y = 0;
           this.directionY = 1;
@@ -92,13 +86,13 @@ playAnimationOnce(images) {
     }
 }
 
+
     jump () {
     this.speedY = 10;
 }
 
 
 hit (enemy, dmg) {
-   
     if (this.isDead()) return;  
     this.energy -= dmg;
     this.hurtType = (enemy instanceof Jellyfish) ? 'electro' : 'poison';

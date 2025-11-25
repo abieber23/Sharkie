@@ -26,7 +26,6 @@ window.addEventListener('keydown', (e) => {
 
 });
 
-// Taste losgelassen → auf false setzen
 window.addEventListener('keyup', (e) => {
     if (e.code === 'ArrowLeft')  keyboard.LEFT = false;
     if (e.code === 'ArrowRight') keyboard.RIGHT = false;

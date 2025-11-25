@@ -1,6 +1,4 @@
 class Endboss extends MovableObject {
-
-
     height= 400;
     width= 400;
     y = 0;
@@ -13,7 +11,6 @@ class Endboss extends MovableObject {
     attackDistance = 200;  
     attackFrameMs = 150;   
     isHurtAnimation = false;
-
     IMAGES_SPAWN = [
         'img/2.Enemy/3 Final Enemy/1.Introduce/1.png',
         'img/2.Enemy/3 Final Enemy/1.Introduce/2.png',
@@ -26,7 +23,6 @@ class Endboss extends MovableObject {
         'img/2.Enemy/3 Final Enemy/1.Introduce/9.png',
         'img/2.Enemy/3 Final Enemy/1.Introduce/10.png',
     ]
-
     IMAGES_WALKING = [
         'img/2.Enemy/3 Final Enemy/2.floating/1.png',
         'img/2.Enemy/3 Final Enemy/2.floating/2.png',
@@ -41,9 +37,7 @@ class Endboss extends MovableObject {
         'img/2.Enemy/3 Final Enemy/2.floating/11.png',
         'img/2.Enemy/3 Final Enemy/2.floating/12.png',
         'img/2.Enemy/3 Final Enemy/2.floating/13.png',
-
     ];
-
     IMAGES_ATTACK = [
         'img/2.Enemy/3 Final Enemy/Attack/1.png',
         'img/2.Enemy/3 Final Enemy/Attack/2.png',
@@ -52,15 +46,12 @@ class Endboss extends MovableObject {
         'img/2.Enemy/3 Final Enemy/Attack/5.png',
         'img/2.Enemy/3 Final Enemy/Attack/6.png',
     ];
-
     IMAGES_HURT= [
         'img/2.Enemy/3 Final Enemy/Hurt/1.png',
         'img/2.Enemy/3 Final Enemy/Hurt/2.png',
         'img/2.Enemy/3 Final Enemy/Hurt/3.png',
         'img/2.Enemy/3 Final Enemy/Hurt/4.png',
-
     ]
-
     IMAGES_DEATH = [
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2.png',
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 6.png',
@@ -74,7 +65,6 @@ class Endboss extends MovableObject {
 
     constructor () {
         super().loadImage('img/2.Enemy/3 Final Enemy/1.Introduce/1.png')
- 
         this.x = 2000;
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_SPAWN);
@@ -89,52 +79,54 @@ class Endboss extends MovableObject {
             right: 35,
             bottom: 70
           };
-
         this.animate();
     } 
 
 
     animate() {
         setInterval(() => {
-          if (this.isDead()) {
-            this.playDeathAnimation();  
-            this.attacking = false;
-            return;                     
-          }
-
-          if (this.isHurtAnimation) {
-            this.playHurtOnce()
-
-            return;
-          }
-
-          if (this.spawning) {
-            this.playSpawnOnce();
-            Sounds.endboss_entry.play()
-            return;
-          }
-
-          if (this.attacking){
-            this.playAttackStep();
-            return;
-          }
-
+            if (this.handleDeath()) return;
+            if (this.handleHurt()) return;
+            if (this.handleSpawn()) return;
+            if (this.handleAttack()) return;
           this.playAnimation(this.IMAGES_WALKING);
-       
           this.moveUpDown(540);
-         
         }, 150);
       }
 
-      playHurtOnce() {
-        // if (!this.isHurtAnimating) return;
+      handleDeath() {
+        if (!this.isDead()) return false;
+        this.playDeathAnimation();
+        this.attacking = false;
+        return true;
+    }
     
+    handleHurt() {
+        if (!this.isHurtAnimation) return false;
+        this.playHurtOnce();
+        return true;
+    }
+    
+    handleSpawn() {
+        if (!this.spawning) return false;
+        this.playSpawnOnce();
+        Sounds.endboss_entry.play();
+        return true;
+    }
+    
+    handleAttack() {
+    if (!this.attacking) return false;
+    this.playAttackStep();
+    return true;
+}
+
+      playHurtOnce() {
         if (this.hurtFrame < this.IMAGES_HURT.length) {
             const path = this.IMAGES_HURT[this.hurtFrame];
             this.img = this.imageCache[path];
             this.hurtFrame++;
         } else {
-            this.isHurtAnimation = false; // fertig
+            this.isHurtAnimation = false; 
             this.hurtFrame = 0;
         }
     }
@@ -159,7 +151,6 @@ class Endboss extends MovableObject {
           this.img = this.imageCache[path];
           this.spawnIndex++;
         } else {
-      
           this.spawning = false;
           this.currentImage = 0; 
           this.scheduleNextAttack();
@@ -185,13 +176,10 @@ class Endboss extends MovableObject {
       playAttackStep() {
         const frames = this.IMAGES_ATTACK.length;
         const step = this.attackDistance / frames;
-
         if (this.attackIndex < frames) {
           const path = this.IMAGES_ATTACK[this.attackIndex++];
           this.img = this.imageCache[path];
-          
           this.x -= step;
-    
         } else {
           this.attacking = false;
           this.attackIndex = 0;
@@ -199,7 +187,6 @@ class Endboss extends MovableObject {
         this.playAnimation(this.IMAGES_WALKING);
           this.scheduleNextAttack();
         }
-       
       }
 
 }

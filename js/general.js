@@ -13,9 +13,9 @@ function toggleFullscreen() {
 function enterFullscreen() {
     if (canvasElement.requestFullscreen) {
         canvasElement.requestFullscreen();
-    } else if (canvasElement.webkitRequestFullscreen) { // Safari
+    } else if (canvasElement.webkitRequestFullscreen) {
         canvasElement.webkitRequestFullscreen();
-    } else if (canvasElement.msRequestFullscreen) { // ältere IE
+    } else if (canvasElement.msRequestFullscreen) { 
         canvasElement.msRequestFullscreen();
     }
 
@@ -25,8 +25,6 @@ function enterFullscreen() {
 function toggleMute() {
     btnMute.classList.toggle("d-none");
     btnLoud.classList.toggle("d-none");
-
-    // WENN du zusätzlich Sound ein/aus machen möchtest:
     if (world) world.toggleMute?.();
 }
 
@@ -42,7 +40,6 @@ function openModal() {
   }
   
   function overlayClick(event) {
-    // wenn außerhalb des Fensters geklickt → schließen
     if (event.target.id === 'modal-overlay') {
       closeModal();
     }

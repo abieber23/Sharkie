@@ -29,8 +29,7 @@ class ThrowableObject extends MovableObject {
 
   if (this.otherDirection) {
     this.x -= 100;  }  else {
-      // nach rechts → evtl. leicht nach rechts versetzen
-      this.x += 40;   // optional
+      this.x += 40;   
     }
 
     this.throw();
