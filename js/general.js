@@ -4,6 +4,12 @@ let btnLoud = document.getElementById("loud");
 let canvasElement = document.getElementById("canvas"); // dein Spielcanvas
 let hint = document.getElementById("fullscreenHint");
 
+
+/**
+ * Toggles fullscreen mode for the application.
+ * If the document is not currently in fullscreen,
+ * it requests fullscreen mode by calling `enterFullscreen()`.
+ */
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
         enterFullscreen();
@@ -18,8 +24,6 @@ function enterFullscreen() {
     } else if (canvasElement.msRequestFullscreen) { 
         canvasElement.msRequestFullscreen();
     }
-
-
 }
 
 function toggleMute() {
@@ -27,9 +31,6 @@ function toggleMute() {
     btnLoud.classList.toggle("d-none");
     if (world) world.toggleMute?.();
 }
-
-
-
 
 function openModal() {
     document.getElementById('modal-overlay').classList.add('active');

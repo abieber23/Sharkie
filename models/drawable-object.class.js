@@ -42,7 +42,7 @@ class DrawableObject {
         if (this instanceof Character || this instanceof Puffer || this instanceof Endboss || this instanceof ThrowableObject || this instanceof CollectableObject) {
             ctx.beginPath();
             ctx.lineWidth = "2";
-            ctx.strokeStyle = "blue";
+            ctx.strokeStyle = "transparent";
             ctx.rect(  this.x + this.offset.left,
                 this.y + this.offset.top,
                 this.width - this.offset.left - this.offset.right,

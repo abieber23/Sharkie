@@ -282,7 +282,6 @@ checkCollectableCollisions() {
       this.level.enemies.push(boss);
       this.endboss = boss;     
       this.endbossSpawned = true; 
-      console.log("Endboss gespawnt!");
     }
   }
   
