@@ -64,9 +64,9 @@ backgroundPlaying = false;
 
     draw () {
 if (!this.gameStarted) {
-    this.drawStartScreen();
+    drawStartScreen(this);
     return requestAnimationFrame(() => this.draw());
-  }
+}
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backroundObjects);
@@ -85,10 +85,9 @@ if (!this.gameStarted) {
           Sounds.win.play();
         }
         if (this.gameWon) {
-          this.drawWinScreen();
+            drawEndScreen(this, this.winImg);
         } else if (this.character.deathAnimationFinished) {
-          this.drawGameOver();
-
+            drawEndScreen(this, this.gameOverImg);
         }
         if (this.keyboard.PAUSE) {
             this.togglePause();
@@ -96,9 +95,7 @@ if (!this.gameStarted) {
         let self = this;
         requestAnimationFrame(function() {
             self.draw();
-        }
-        
-        );
+        }   );
     }
 
     addObjectsToMap(objects) {
@@ -111,8 +108,7 @@ if (!this.gameStarted) {
         if (mo.otherDirection) {
             this.ctx.save();
             this.ctx.translate(2 * mo.x + mo.width, 0);
-            this.ctx.scale(-1,1);            
-        }
+            this.ctx.scale(-1,1);         }
         mo.draw(this.ctx);
         mo.drawFrame(this.ctx)
     if (mo.otherDirection) {
@@ -129,7 +125,6 @@ togglePause() {
         }
     }
 }
-
 
 checkCollisions() {
     this.collisionTimer = setInterval(() => {
@@ -248,24 +243,17 @@ createBubble(isPoison) {
 startThrowAnimation(isPoison, onFinished) {
     this.character.startShoot(isPoison, onFinished);
 }
-  
-  handleCoinCollect(item) {
-    let newValue = Math.min(this.statusBarCoin.percentage_coin + 20, 100);
-    this.statusBarCoin.setPercentageCoin(newValue);
-    Sounds.coin.play();
-}
-
-handlePoisonCollect(item) {
-    let newValue = Math.min(this.statusBarPoison.percentage_poison + 20, 100);
-    this.statusBarPoison.setPercentagePoison(newValue);
-}
 
 handleCollectable(item) {
     if (item.type === 'coin') {
-        this.handleCoinCollect(item);
-    } 
-    else if (item.type === 'poison') {
-        this.handlePoisonCollect(item);
+        const bar = this.statusBarCoin;
+        const newValue = Math.min(bar.percentage_coin + 20, 100);
+        bar.setPercentageCoin(newValue);
+        Sounds.coin.play();
+    } else if (item.type === 'poison') {
+        const bar = this.statusBarPoison;
+        const newValue = Math.min(bar.percentage_poison + 20, 100);
+        bar.setPercentagePoison(newValue);
     }
 }
 
@@ -385,78 +373,6 @@ initializeEnemies() {
         e.world = this;
         if (e.startBehavior) e.startBehavior();
     });
-}
-
-  drawGameOver() {
-    this.ctx.save();
-    this.isPaused = true;
-    this.stopBackgroundSound();
-    this.drawOverlayBackground(0.6);
-    if (!this.gameOverImg.complete) {
-        this.ctx.restore();
-        return;
-    }
-    const goRect = this.drawCenteredImage(this.gameOverImg, 0.7, -40);
-    this.drawTryAgainBelow(this.tryAgainImg, goRect, 0.4, 20);
-    this.canvas.style.cursor = 'pointer';
-    this.ctx.restore();
-}
-
-
-  drawWinScreen() {
-    this.ctx.save();
-    this.isPaused = true;
-    this.stopBackgroundSound();
-    this.drawOverlayBackground(0.6);
-    if (!this.winImg.complete) {
-        this.ctx.restore();
-        return;
-    }
-    const winRect = this.drawCenteredImage(this.winImg, 0.7, -40);
-    this.drawTryAgainBelow(this.tryAgainImg, winRect, 0.4, 20);
-    this.canvas.style.cursor = 'pointer';
-    this.ctx.restore();
-}
-
-
-  drawStartScreen() {
-    this.ctx.save();
-    this.isPaused = true;
-    this.drawOverlayBackground(1);
-    if (this.startImg.complete) {
-        const rect = this.drawCenteredImage(this.startImg, 0.6);
-        this.startButton = rect;}
-    this.canvas.style.cursor = 'pointer';
-    this.ctx.restore();
-}
-
-  drawOverlayBackground(alpha = 1) {
-    this.ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-}
-
-drawCenteredImage(img, relativeWidth = 0.7, yOffset = 0) {
-    const width = this.canvas.width * relativeWidth;
-    const scale = width / img.width;
-    const height = img.height * scale;
-    const x = (this.canvas.width - width) / 2;
-    const y = (this.canvas.height - height) / 2 + yOffset;
-    this.ctx.drawImage(img, x, y, width, height);
-    return { x, y, width, height };
-}
-
-drawTryAgainBelow(img, aboveRect, relativeWidth = 0.4, margin = 20) {
-    if (!img.complete) {
-        this.tryAgainButton = null;
-        return;
-    }
-    const width  = aboveRect.width * relativeWidth;
-    const scale  = width / img.width;
-    const height = img.height * scale;
-    const x = (this.canvas.width - width) / 2;
-    const y = aboveRect.y + aboveRect.height + margin;
-    this.ctx.drawImage(img, x, y, width, height);
-    this.tryAgainButton = { x, y, width, height };
 }
 
   toggleMute() {

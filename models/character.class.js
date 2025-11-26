@@ -266,8 +266,6 @@ class Character extends MovableObject {
           if (onFinish) onFinish(); 
         }, duration);
       }
-      
-      
 
 
 }
