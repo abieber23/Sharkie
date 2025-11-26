@@ -208,6 +208,10 @@ text-align: right;
 
 /* Auf kleinen Screens im Querformat Mobile-Buttons einblenden */
 @media (max-width: 900px) and (orientation: landscape) {
+body{
+  overflow: hidden;
+}
+
   #mobile-controls {
     display: flex;
   }
