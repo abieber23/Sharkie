@@ -29,6 +29,7 @@ button {
 
 canvas {
     background-color: black;
+    display: block;
 }
 
 
@@ -40,10 +41,13 @@ text-align: right;
 
 /* Normale Größe im Layout */
 #game-wrapper {
-    width: 720px;
-    height: 480px;
-    background: #001b2e; /* optional */
-  }
+  width: 100%;        /* passt sich der Bildschirmbreite an */
+  max-width: 720px;   /* wird nie größer als dein ursprüngliches Layout */
+  height: 480px;      /* bleibt in der Höhe 480px */
+  background: #001b2e;
+  margin: 0 auto;     /* zentriert auf größeren Bildschirmen */
+}
+
   
   /* Wenn im Vollbild → Wrapper füllt den Screen */
   #game-wrapper:fullscreen,
@@ -206,7 +210,6 @@ text-align: right;
   color: white;
 }
 
-/* Auf kleinen Screens im Querformat Mobile-Buttons einblenden */
 @media (max-width: 900px) and (orientation: landscape) {
 body{
   overflow: hidden;
@@ -216,6 +219,34 @@ body{
     display: flex;
   }
 }
+
+/* @media only screen and (max-width: 720px) {
+
+  #game-wrapper canvas {
+    width: 100%;
+    image-rendering: pixelated;
+  }
+  canvas{
+    width: 100%;
+  }
+} */
+
+@media only screen and (max-height: 480px) {
+
+  #game-wrapper {
+    height: 100vh;        /* wichtig */
+  }
+  #game-wrapper canvas {
+    height: 100vh;
+  }
+  canvas {
+    height: 100vh; 
+  }
+  h1 {
+    display: none;
+  }
+}
+
 
 /* Buttons etwas kleiner auf sehr kleinen Geräten */
 @media (max-width: 600px) and (orientation: landscape) {
