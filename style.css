@@ -39,24 +39,22 @@ text-align: right;
 
 }
 
-/* Normale Größe im Layout */
+
 #game-wrapper {
-  width: 100%;        /* passt sich der Bildschirmbreite an */
-  max-width: 720px;   /* wird nie größer als dein ursprüngliches Layout */
-  height: 480px;      /* bleibt in der Höhe 480px */
+  width: 100%;     
+  max-width: 720px;  
+  height: 480px;      
   background: #001b2e;
-  margin: 0 auto;     /* zentriert auf größeren Bildschirmen */
+  margin: 0 auto;    
 }
 
-  
-  /* Wenn im Vollbild → Wrapper füllt den Screen */
   #game-wrapper:fullscreen,
   #game-wrapper:-webkit-full-screen {
     width: 100vw;
     height: 100vh;
   }
+
   
-  /* Canvas immer an Wrapper anpassen */
   #game-wrapper canvas {
     width: 100%;
     height: 100%;

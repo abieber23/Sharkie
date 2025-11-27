@@ -9,6 +9,10 @@ class Character extends MovableObject {
     isAttacking = false;
     isShooting = false;
     shootImages = null;
+    isSlapAnimation = false; 
+    slapFrame = 0;
+slapActive = false;
+
     IMAGES_WALKING = [
         'img/1.Sharkie/3.Swim/1.png',
         'img/1.Sharkie/3.Swim/2.png',
@@ -213,19 +217,31 @@ class Character extends MovableObject {
     }
 
     handleFinSlap() {
-        if (!this.world.keyboard.ATTACK) return false;
-        this.playAnimationOnce(this.IMAGES_ATTACK_FIN);
+        if (!this.world.keyboard.ATTACK || this.slapActive) return false; 
+        this.slapActive = true;
+        this.slapFrame = 0;
         this.isAttacking = true;
         Sounds.slap.play();
-        setTimeout(() => {
-            this.isAttacking = false;
-            this.world.keyboard.ATTACK = false;
-            this.currentImage = 0;
-        }, this.IMAGES_ATTACK_FIN.length * 100 + 200);
+        this.runSlapAnimation();
         this.lastActionTime = Date.now();
         return true;
     }
     
+    runSlapAnimation() {
+        const interval = setInterval(() => {
+            if (this.slapFrame < this.IMAGES_ATTACK_FIN.length) {
+                const path = this.IMAGES_ATTACK_FIN[this.slapFrame];
+                this.img = this.imageCache[path];
+                this.slapFrame++;
+            } else {
+                clearInterval(interval);
+                this.slapActive = false;
+                this.world.keyboard.ATTACK = false;
+                this.isAttacking = false;
+            }
+        }, 100);
+    }
+
     handleShooting() {
         if (!this.isShooting) return false 
             this.playAnimationOnce(this.shootImages);
@@ -235,7 +251,6 @@ class Character extends MovableObject {
             }
             return true;
     }
-
 
     IDLE() {
         let idleTime = Date.now() - this.lastActionTime;
