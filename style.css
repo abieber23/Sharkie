@@ -188,18 +188,16 @@ text-align: right;
   text-align: center;
   padding: 20px;
 }
-
 #mobile-controls {
   position: fixed;
-  bottom: 20px;
-  width: 100%;
-  display: none;      
-  justify-content: center;
-  gap: 12px;
+  inset: 0;
+  pointer-events: none;   /* Buttons selbst aktiv, Container nicht */
   z-index: 5000;
+  display: none;          /* wird nur im Landscape aktiviert */
 }
 
 #mobile-controls button {
+  position: absolute;
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -207,9 +205,41 @@ text-align: right;
   font-size: 24px;
   background: rgba(0, 0, 0, 0.6);
   color: white;
+  pointer-events: auto;   /* wichtig */
 }
 
-@media (max-width: 900px) and (orientation: landscape) {
+#btn-left {
+  left: 20px;
+  bottom: 35%;
+}
+
+#btn-right {
+  left: 100px;
+  bottom: 35%;
+}
+
+#btn-jump {
+  left: 60px;
+  bottom: 50%;
+}
+
+#btn-shoot {
+  right: 20px;
+  bottom: 40%;
+}
+
+#btn-slap {
+  right: 20px;
+  bottom: 25%;
+}
+
+#btn-pause {
+  right: 20px;
+  bottom: 10%;
+}
+
+
+@media (max-width: 1366px) and (orientation: landscape) {
 body{
   overflow: hidden;
 }
@@ -218,6 +248,13 @@ body{
     display: flex;
   }
 }
+
+/* @media (pointer: coarse) {
+  #mobile-controls {
+    display: flex;
+  }
+} */
+
 
 @media only screen and (max-height: 580px) {
 

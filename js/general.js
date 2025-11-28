@@ -136,3 +136,13 @@ document.addEventListener("DOMContentLoaded", () => {
         holdButton(btnPause, () => world.togglePause());
     }
 });
+
+const mobileControls = document.getElementById("mobile-controls");
+
+// function isTouchDevice() {
+//     return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+// }
+
+// if (isTouchDevice()) {
+//     document.getElementById("mobile-controls").style.display = "flex";
+// }
