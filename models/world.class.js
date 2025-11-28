@@ -56,6 +56,7 @@ backgroundPlaying = false;
         this.checkCollisions();
         this.checkProjectileCollisions();
         this.checkCollectableCollisions(); 
+
     }
 
     setWorld() {
@@ -373,14 +374,12 @@ initializeEnemies() {
         if (e.startBehavior) e.startBehavior();
     });
 }
-
-  toggleMute() {
-    this.isMuted = !this.isMuted;  
+applyMuteState(isMuted) {
     for (let key in Sounds) {
-        Sounds[key].muted = this.isMuted;
+        Sounds[key].muted = isMuted;
     }
 }
-  
+
 playBackgroundSound() {
     if (!this.backgroundPlaying) {
         Sounds.background.currentTime = 0;

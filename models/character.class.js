@@ -173,24 +173,31 @@ slapActive = false;
         this.world.camera_x = -this.x + 50;
     }
     
-    animate () {
-        setInterval(()=> {
-            if (this.world.isPaused) return; 
+    animate() {
+        setInterval(() => {
+            if (this.world.isPaused) return;
             if (this.isDead()) return;
+    
             this.handleMovement();
             this.updateCamera();
-        },1000/60);
-        setInterval (() => {
-            if (this.world.isPaused) return; 
+    
+        }, 1000 / 60);
+
+        this.startAnimationLoop() ;
+    }
+    
+    startAnimationLoop() {
+        setInterval(() => {
+            if (this.world.isPaused) return;
             if (this.handleDeath()) return;
+            if (this.slapActive) return;
             if (this.handleFinSlap()) return;
             if (this.handleShooting()) return;
             if (this.handleHurt()) return;
-           else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_WALKING)
-    }
-    else this.IDLE()
-    },100);
+            if (this.world.keyboard.RIGHT  || this.world.keyboard.LEFT  || this.isAboveGround()) 
+            {   this.playAnimation(this.IMAGES_WALKING); return; }
+            this.IDLE();
+        }, 100);
     }
 
     handleHurt() {
@@ -221,6 +228,8 @@ slapActive = false;
         this.slapActive = true;
         this.slapFrame = 0;
         this.isAttacking = true;
+        console.log("slap");
+        this.world.keyboard.ATTACK = false;
         Sounds.slap.play();
         this.runSlapAnimation();
         this.lastActionTime = Date.now();
@@ -236,7 +245,7 @@ slapActive = false;
             } else {
                 clearInterval(interval);
                 this.slapActive = false;
-                this.world.keyboard.ATTACK = false;
+                // this.world.keyboard.ATTACK = false;
                 this.isAttacking = false;
             }
         }, 100);

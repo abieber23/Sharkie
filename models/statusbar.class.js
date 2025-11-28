@@ -30,7 +30,6 @@ IMAGES_COINS = [
 percentage_life = 100;
 percentage_coin = 0;
 percentage_poison = 0;
-
 type = 'life';      
 
 constructor(type , start , x , y ) {
@@ -40,12 +39,10 @@ constructor(type , start , x , y ) {
   this.loadImages(this.IMAGES_LIFE);
   this.loadImages(this.IMAGES_COINS);
   this.loadImages(this.IMAGES_POISON);
-
   this.x = x;
   this.y = y;
   this.width = 250;
   this.height = 80;
-
   if (this.type === 'life')   this.setPercentageLife(start);
   if (this.type === 'coins')  this.setPercentageCoin(start);
   if (this.type === 'poison') this.setPercentagePoison(start); // Startwert setzen

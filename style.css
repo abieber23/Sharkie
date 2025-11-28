@@ -14,6 +14,7 @@ body {
     flex-direction: column;
     background: url('img/3. Background/Backround.png') ;
     background-size: cover;
+    font-size: 16px;
 }
 
 html {
@@ -54,12 +55,11 @@ text-align: right;
     height: 100vh;
   }
 
-  
+
   #game-wrapper canvas {
     width: 100%;
     height: 100%;
     display: block;
-    /* optional für Pixel-Optik: */
     image-rendering: pixelated;
   }
   
@@ -84,28 +84,28 @@ text-align: right;
     background-color: yellow;
     color: rgb(27,20,100);
     font-weight: bold;
+    font-size: 16px;
   }
 
   #modal-overlay {
     position: fixed;
-    inset: 0; /* top, right, bottom, left = 0 */
-    background: rgba(0, 0, 0, 0.5); /* Abdunkelung */
-    display: none; /* wird per JS auf flex gesetzt */
+    inset: 0; 
+    background: rgba(0, 0, 0, 0.5); 
+    display: none;
     justify-content: center;
     align-items: center;
     z-index: 9999;
   }
 
-  /* Sichtbar-Klasse */
   #modal-overlay.active {
     display: flex;
   }
 
-  /* Das eigentliche Fenster */
+
   #modal-window {
     position: relative;
     width: 500px;
-    height: 500px;
+    height: 550px;
     background: rgb(27,20,100);
     color:yellow;
     text-align: center;
@@ -115,7 +115,6 @@ text-align: right;
     box-shadow: 0 10px 30px rgba(0,0,0,0.4);
   }
 
-  /* Close-Button (X) */
   #modal-close {
     position: absolute;
     top: 8px;
@@ -133,14 +132,18 @@ text-align: right;
 
   .moveset img {
     width: 200px;
+    object-fit: contain;
+
   }
 
   .moveset{
-    padding-bottom: 60px;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 40px;
   }
 
   canvas.try-again-hover {
-    cursor: pointer; /* beim drüberfahren */
+    cursor: pointer; 
 }
 
 .mute-button {
@@ -171,13 +174,12 @@ text-align: right;
   opacity: 1;
 }
 
-/* Overlay für Hochformat (nur mobile) */
 #rotate-device {
   position: fixed;
   inset: 0;
   background: black;
   color: white;
-  display: none;           /* per JS auf flex gesetzt */
+  display: none;        
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -187,12 +189,11 @@ text-align: right;
   padding: 20px;
 }
 
-/* Mobile-Touch-Controls – standardmäßig aus */
 #mobile-controls {
   position: fixed;
   bottom: 20px;
   width: 100%;
-  display: none;        /* nur auf kleinen Screens sichtbar */
+  display: none;      
   justify-content: center;
   gap: 12px;
   z-index: 5000;
@@ -218,21 +219,10 @@ body{
   }
 }
 
-/* @media only screen and (max-width: 720px) {
-
-  #game-wrapper canvas {
-    width: 100%;
-    image-rendering: pixelated;
-  }
-  canvas{
-    width: 100%;
-  }
-} */
-
-@media only screen and (max-height: 480px) {
+@media only screen and (max-height: 580px) {
 
   #game-wrapper {
-    height: 100vh;        /* wichtig */
+    height: 100vh;       
   }
   #game-wrapper canvas {
     height: 100vh;
@@ -245,8 +235,6 @@ body{
   }
 }
 
-
-/* Buttons etwas kleiner auf sehr kleinen Geräten */
 @media (max-width: 600px) and (orientation: landscape) {
   #mobile-controls button {
     width: 50px;

@@ -4,6 +4,9 @@ let btnLoud = document.getElementById("loud");
 let canvasElement = document.getElementById("canvas"); // dein Spielcanvas
 let hint = document.getElementById("fullscreenHint");
 
+document.addEventListener("DOMContentLoaded", () => {
+    loadMuteFromStorage();
+});
 
 /**
  * Toggles fullscreen mode for the application.
@@ -26,10 +29,33 @@ function enterFullscreen() {
     }
 }
 
+
 function toggleMute() {
     btnMute.classList.toggle("d-none");
     btnLoud.classList.toggle("d-none");
-    if (world) world.toggleMute?.();
+    const isMuted = !btnLoud.classList.contains("d-none");
+    localStorage.setItem("isMuted", isMuted ? "1" : "0");
+    for (let key in Sounds) {
+        Sounds[key].muted = isMuted;
+    }
+    if (window.world && world.applyMuteState) {
+        world.applyMuteState(isMuted);
+    }
+}
+
+function loadMuteFromStorage() {
+    const saved = localStorage.getItem("isMuted");
+    const isMuted = saved === "1";
+    if (isMuted) {
+        btnLoud.classList.remove("d-none");
+        btnMute.classList.add("d-none");
+    } else {
+        btnLoud.classList.add("d-none");
+        btnMute.classList.remove("d-none");
+    }
+    for (let key in Sounds) {
+        Sounds[key].muted = isMuted;
+    }
 }
 
 function openModal() {
