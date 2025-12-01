@@ -191,9 +191,9 @@ text-align: right;
 #mobile-controls {
   position: fixed;
   inset: 0;
-  pointer-events: none;   /* Buttons selbst aktiv, Container nicht */
+  pointer-events: none; 
   z-index: 5000;
-  display: none;          /* wird nur im Landscape aktiviert */
+  display: none;        
 }
 
 #mobile-controls button {
@@ -248,12 +248,6 @@ body{
     display: flex;
   }
 }
-
-/* @media (pointer: coarse) {
-  #mobile-controls {
-    display: flex;
-  }
-} */
 
 
 @media only screen and (max-height: 580px) {

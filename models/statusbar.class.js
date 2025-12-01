@@ -31,6 +31,7 @@ percentage_life = 100;
 percentage_coin = 0;
 percentage_poison = 0;
 type = 'life';      
+percentage_boss=100;
 
 constructor(type , start , x , y ) {
   super();
@@ -46,6 +47,8 @@ constructor(type , start , x , y ) {
   if (this.type === 'life')   this.setPercentageLife(start);
   if (this.type === 'coins')  this.setPercentageCoin(start);
   if (this.type === 'poison') this.setPercentagePoison(start); // Startwert setzen
+  if (this.type === 'boss') this.setPercentageBoss(start);
+
 }
 
 
@@ -64,6 +67,12 @@ setPercentageCoin (percentage){
 setPercentagePoison (percentage){
     this.percentage_poison = percentage;
     let path = this.IMAGES_POISON [this.resolveImageIndex(percentage)]
+    this.img = this.imageCache[path];
+}
+
+setPercentageBoss(percentage){
+    this.percentage_boss = percentage;
+    let path = this.IMAGES_LIFE[this.resolveImageIndex(percentage)];
     this.img = this.imageCache[path];
 }
 

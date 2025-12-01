@@ -10,6 +10,7 @@ class World {
     statusBarLife = new StatusBar ('life', 100,20,0);
     statusBarCoin = new StatusBar ('coins', 0,20,50);
     statusBarPoison = new StatusBar ('poison', 0,20,100);
+    
     throwableObjects = [];
     collectibleObject = [
         new CollectableObject('coin'),
@@ -56,7 +57,7 @@ backgroundPlaying = false;
         this.checkCollisions();
         this.checkProjectileCollisions();
         this.checkCollectableCollisions(); 
-
+        this.bossHealthBar = new StatusBar('life', 100, 450, 0);
     }
 
     setWorld() {
@@ -80,6 +81,12 @@ if (!this.gameStarted) {
         this.addToMap(this.statusBarLife);
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarPoison);
+        // if (this.bossHealthBar && this.endboss && !this.endboss.isDead()) {
+        //     this.addToMap(this.bossHealthBar);
+        // }        
+        // if (this.endboss && this.endboss.isDead()) {
+        //     this.bossHealthBar = null;
+        // }        
         this.checkBossSpawn();
         if (!this.gameWon && this.endboss && this.endboss.isDead()) {
           this.gameWon = true;
@@ -97,6 +104,12 @@ if (!this.gameStarted) {
         requestAnimationFrame(function() {
             self.draw();
         }   );
+        if (this.endboss) {
+            this.addToMap(this.bossHealthBar);
+        }
+                if (this.endboss.isDead()) {
+            this.bossHealthBar = null;
+        }        
     }
 
     addObjectsToMap(objects) {
@@ -193,8 +206,18 @@ applyProjectileDamage(bubble, enemy) {
     } else {
         enemy.energy -= 40;
     }
+    this.updateBossHealth(enemy);
+
     Sounds.enemy_hurt.play();
 }
+
+updateBossHealth(enemy) {
+    if (!(enemy instanceof Endboss) || !this.bossHealthBar) return;
+
+    let percent = Math.max(enemy.energy / 300 * 100, 0);
+    this.bossHealthBar.setPercentageLife(percent);
+}
+
 
 applyEndbossHurtState(enemy) {
     if (enemy instanceof Endboss) {
@@ -283,6 +306,7 @@ checkCollectableCollisions() {
       this.level.enemies.push(boss);
       this.endboss = boss;     
       this.endbossSpawned = true; 
+    //   this.bossHealthBar = new StatusBar('boss', 100, 450, 0);
     }
   }
   
