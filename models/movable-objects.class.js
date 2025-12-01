@@ -1,121 +1,101 @@
 class MovableObject extends DrawableObject {
+  speed = 0.15;
+  otherDirection = false;
+  speedY = 0;
+  acceleration = 0.5;
+  lastHit = 0;
+  Death = false;
+  contactDamage = 0;
 
-
-
-    speed = 0.15;
-    otherDirection= false;
-    speedY= 0;
-    acceleration = 0.5;
-    lastHit = 0;
-    Death = false;
-    contactDamage = 0
-
-
-    applyGravity() {
-        setInterval(() => {
-            if (this.isAboveGround()|| this.speedY > 0) {
-                this.y -= this.speedY;
-                this.speedY -= this.acceleration;
-            }
-
-        }, 1000 / 25);
-    }
-
-
-
-
-    isAboveGround() {
-        if (this instanceof ThrowableObject) {
-            return true;
-        }
-        else {
-            return this.y < 260
-        }
-    
-    }
-
-
-    
-    isColliding(mo) {
-        return (this.x + this.width - this.offset.right) > (mo.x + mo.offset.left) &&
-               (this.x + this.offset.left) < (mo.x + mo.width - mo.offset.right) &&
-               (this.y + this.height - this.offset.bottom) > (mo.y + mo.offset.top) &&
-               (this.y + this.offset.top) < (mo.y + mo.height - mo.offset.bottom);
+  applyGravity() {
+    setInterval(() => {
+      if (this.isAboveGround() || this.speedY > 0) {
+        this.y -= this.speedY;
+        this.speedY -= this.acceleration;
       }
+    }, 1000 / 25);
+  }
 
-    moveRight () {
-        this.x += this.speed;
-    
+  isAboveGround() {
+    if (this instanceof ThrowableObject) {
+      return true;
+    } else {
+      return this.y < 260;
     }
+  }
 
-    moveUpDown(canvasHeight) {
-        if (!this.directionY) this.directionY = 1; 
-        if (!this.speedY) this.speedY = 2; 
-        this.y += this.speedY * this.directionY;
-        if (this.y + this.height >= canvasHeight) {
-          this.y = canvasHeight - this.height;
-          this.directionY = -1;
-        }
-        if (this.y <= 0) {
-          this.y = 0;
-          this.directionY = 1;
-        }
-      }
-      
+  isColliding(mo) {
+    return (
+      this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+      this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+      this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
+      this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
+    );
+  }
 
-    moveLeft (){
-        this.x -= this.speed;
-    };
+  moveRight() {
+    this.x += this.speed;
+  }
 
-    playAnimation(images){
+  moveUpDown(canvasHeight) {
+    if (!this.directionY) this.directionY = 1;
+    if (!this.speedY) this.speedY = 2;
+    this.y += this.speedY * this.directionY;
+    if (this.y + this.height >= canvasHeight) {
+      this.y = canvasHeight - this.height;
+      this.directionY = -1;
+    }
+    if (this.y <= 0) {
+      this.y = 0;
+      this.directionY = 1;
+    }
+  }
+
+  moveLeft() {
+    this.x -= this.speed;
+  }
+
+  playAnimation(images) {
     let i = this.currentImage % images.length;
     let path = images[i];
     this.img = this.imageCache[path];
     this.currentImage++;
-}
+  }
 
-playAnimationOnce(images) {
+  playAnimationOnce(images) {
     if (this.currentImage < images.length) {
-        const path = images[this.currentImage];
-        this.img = this.imageCache[path];
-        this.currentImage++;
+      const path = images[this.currentImage];
+      this.img = this.imageCache[path];
+      this.currentImage++;
     } else {
-
-        const path = images[images.length - 1];
-        this.img = this.imageCache[path];
-    }
-}
-
-
-    jump () {
-    this.speedY = 10;
-}
-
-
-hit (enemy, dmg) {
-    if (this.isDead()) return;  
-    this.energy -= dmg;
-    this.hurtType = (enemy instanceof Jellyfish) ? 'electro' : 'poison';
-    if (this.energy <= 0) {
-      this.energy = 0;
-      this.death = true;          
-      this.currentImage = 0;      
-    } else {
-      this.lastHit = Date.now();  
+      const path = images[images.length - 1];
+      this.img = this.imageCache[path];
     }
   }
 
+  jump() {
+    this.speedY = 10;
+  }
 
-isHurt () {
+  hit(enemy, dmg) {
+    if (this.isDead()) return;
+    this.energy -= dmg;
+    this.hurtType = enemy instanceof Jellyfish ? "electro" : "poison";
+    if (this.energy <= 0) {
+      this.energy = 0;
+      this.death = true;
+      this.currentImage = 0;
+    } else {
+      this.lastHit = Date.now();
+    }
+  }
+
+  isHurt() {
     let timepassed = new Date().getTime() - this.lastHit;
-    return timepassed < 400;
+    return timepassed < 300;
+  }
+
+  isDead() {
+    return this.energy <= 0;
+  }
 }
-
-isDead () {
-  return this.energy <= 0
-
-}
-
-
-}
-
