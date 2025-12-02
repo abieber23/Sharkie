@@ -98,12 +98,12 @@ class World {
     requestAnimationFrame(function () {
       self.draw();
     });
-    if (this.endboss) {
-      this.addToMap(this.bossHealthBar);
-    }
-    if (this.endboss.isDead()) {
-      this.bossHealthBar = null;
-    }
+    if (this.endboss && !this.endboss.isDead()) {
+        this.addToMap(this.bossHealthBar);
+      }
+    // if (this.endboss=null) {
+    //   this.bossHealthBar = null;
+    // }
   }
 
   addObjectsToMap(objects) {
@@ -300,6 +300,7 @@ class World {
       this.level.enemies.push(boss);
       this.endboss = boss;
       this.endbossSpawned = true;
+      boss.world = this;
     }
   }
 

@@ -11,6 +11,7 @@ class Endboss extends MovableObject {
   attackDistance = 300;
   attackFrameMs = 150;
   speedY = 4;
+  speed = 8;
   isHurtAnimation = false;
   IMAGES_SPAWN = [
     "img/2.Enemy/3 Final Enemy/1.Introduce/1.png",
@@ -91,6 +92,8 @@ class Endboss extends MovableObject {
       if (this.handleAttack()) return;
       this.playAnimation(this.IMAGES_WALKING);
       this.moveUpDown(540);
+      this.followCharacter();
+
     }, 150);
   }
 
@@ -170,19 +173,92 @@ class Endboss extends MovableObject {
     this.attackIndex = 0;
   }
 
-  playAttackStep() {
-    const frames = this.IMAGES_ATTACK.length;
-    const step = this.attackDistance / frames;
-    if (this.attackIndex < frames) {
-      const path = this.IMAGES_ATTACK[this.attackIndex++];
-      this.img = this.imageCache[path];
-      this.x -= step;
-    } else {
-      this.attacking = false;
-      this.attackIndex = 0;
+  // playAttackStep() {
+  //   const frames = this.IMAGES_ATTACK.length;
+  //   const step = this.attackDistance / frames;
+  //   if (this.attackIndex < frames) {
+  //     // const path = this.IMAGES_ATTACK[this.attackIndex++];
+  //     // this.img = this.imageCache[path];
+  //     // this.x -= step;
+  //     this.attackStepDirection();
+  //   } else {
+  //     this.attacking = false;
+  //     this.attackIndex = 0;
+  //     this.x += this.attackDistance;
+  //     this.playAnimation(this.IMAGES_WALKING);
+  //     this.scheduleNextAttack();
+  //   }
+  // }
+
+// attackStepDirection(){
+//   const frames = this.IMAGES_ATTACK.length;
+//   const step = this.attackDistance / frames;
+
+//   // Horizontal verfolgen
+//   if (!this.otherDirection) {
+//     this.x += step;   // schneller bewegen → aggressiver Boss
+//     const path = this.IMAGES_ATTACK[this.attackIndex++];
+//     this.img = this.imageCache[path];
+//   } else {
+//     this.x -= step;
+//     const path = this.IMAGES_ATTACK[this.attackIndex++];
+//     this.img = this.imageCache[path];
+//   }
+// }
+
+playAttackStep() {
+  const frames = this.IMAGES_ATTACK.length;
+
+  if (this.attackIndex < frames) {
+    this.attackStepDirection();
+  } else {
+    this.attacking = false;
+
+    // Nach dem Angriff wieder zurück dashen
+    if (!this.otherDirection) {
       this.x += this.attackDistance;
-      this.playAnimation(this.IMAGES_WALKING);
-      this.scheduleNextAttack();
+    } else {
+      this.x -= this.attackDistance;
     }
+
+    this.attackIndex = 0;
+    this.playAnimation(this.IMAGES_WALKING);
+    this.scheduleNextAttack();
   }
 }
+
+attackStepDirection() {
+  const frames = this.IMAGES_ATTACK.length;
+  const step = this.attackDistance / frames;
+  const path = this.IMAGES_ATTACK[this.attackIndex++];
+
+  this.img = this.imageCache[path];
+
+  if (!this.otherDirection) {
+    // Boss schaut nach links → Angriff nach links
+    this.x -= step;
+  } else {
+    // Boss schaut nach rechts → Angriff nach rechts
+    this.x += step;
+  }
+}
+
+
+followCharacter() {
+  if (!this.world || !this.world.character) return;
+
+  const char = this.world.character;
+
+  // Horizontal verfolgen
+  if (char.x > this.x) {
+    this.x += this.speed * 50;   // schneller bewegen → aggressiver Boss
+    this.otherDirection = true;
+  } else {
+    this.x -= this.speed * 50;
+    this.otherDirection = false; 
+  }
+
+}
+}
+
+
