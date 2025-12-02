@@ -45,13 +45,20 @@ text-align: right;
 
 #game-wrapper {
   width: auto;
-  height: auto;          /* benutze den ganzen Screen */
+  height: auto;         
   display: flex;
   justify-content: center;
   align-items: center;
   background: #001b2e;
   margin: 0 auto;
 }
+
+.impressum-container {
+  max-width: 800px;  
+  width: 90%;        
+  margin: 0 auto;    
+  padding: 20px;      
+  text-align: left;   }
 
   #game-wrapper:fullscreen,
   #game-wrapper:-webkit-full-screen {
@@ -62,9 +69,9 @@ text-align: right;
 
   #game-wrapper canvas {
     width: 100%;
-    max-width: 720px;       /* Spielbreite beschränkt */
+    max-width: 720px;       
     height: auto;
-    max-height: 100%;       /* WICHTIG! verhindert Abschneiden */
+    max-height: 100%;       
   }
   
 
@@ -209,7 +216,7 @@ text-align: right;
   font-size: 24px;
   background: rgba(0, 0, 0, 0.6);
   color: white;
-  pointer-events: auto;   /* wichtig */
+  pointer-events: auto;  
 }
 
 #btn-left {
@@ -243,15 +250,6 @@ text-align: right;
 }
 
 
-@media (max-width: 1366px) and (orientation: landscape) {
-/* body{
-  overflow: hidden;
-} */
-
-  /* #mobile-controls {
-    display: flex;
-  } */
-}
 
 
 @media only screen and (max-height: 580px) {
