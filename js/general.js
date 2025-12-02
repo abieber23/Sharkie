@@ -163,3 +163,37 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const mobileControls = document.getElementById("mobile-controls");
+
+// function isMobileDevice() {
+//     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+//                         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  
+//     const hasTouch = navigator.maxTouchPoints > 0;
+//     const smallScreen = window.innerWidth < 900;
+  
+//     return hasTouch || smallScreen || isIOSDevice;
+//   }
+  
+  
+function isMobileDevice() {
+    return navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)
+        || window.matchMedia("(pointer: coarse)").matches;
+}
+
+
+
+
+  function updateMobileControls() {
+    if (isMobileDevice()) {
+        mobileControls.style.display = "block";
+    } else {
+        mobileControls.style.display = "none";
+    }
+}
+
+window.addEventListener("resize", updateMobileControls);
+updateMobileControls();
+
+
+  
+

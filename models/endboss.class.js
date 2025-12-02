@@ -173,38 +173,6 @@ class Endboss extends MovableObject {
     this.attackIndex = 0;
   }
 
-  // playAttackStep() {
-  //   const frames = this.IMAGES_ATTACK.length;
-  //   const step = this.attackDistance / frames;
-  //   if (this.attackIndex < frames) {
-  //     // const path = this.IMAGES_ATTACK[this.attackIndex++];
-  //     // this.img = this.imageCache[path];
-  //     // this.x -= step;
-  //     this.attackStepDirection();
-  //   } else {
-  //     this.attacking = false;
-  //     this.attackIndex = 0;
-  //     this.x += this.attackDistance;
-  //     this.playAnimation(this.IMAGES_WALKING);
-  //     this.scheduleNextAttack();
-  //   }
-  // }
-
-// attackStepDirection(){
-//   const frames = this.IMAGES_ATTACK.length;
-//   const step = this.attackDistance / frames;
-
-//   // Horizontal verfolgen
-//   if (!this.otherDirection) {
-//     this.x += step;   // schneller bewegen → aggressiver Boss
-//     const path = this.IMAGES_ATTACK[this.attackIndex++];
-//     this.img = this.imageCache[path];
-//   } else {
-//     this.x -= step;
-//     const path = this.IMAGES_ATTACK[this.attackIndex++];
-//     this.img = this.imageCache[path];
-//   }
-// }
 
 playAttackStep() {
   const frames = this.IMAGES_ATTACK.length;
@@ -213,8 +181,6 @@ playAttackStep() {
     this.attackStepDirection();
   } else {
     this.attacking = false;
-
-    // Nach dem Angriff wieder zurück dashen
     if (!this.otherDirection) {
       this.x += this.attackDistance;
     } else {
@@ -235,10 +201,8 @@ attackStepDirection() {
   this.img = this.imageCache[path];
 
   if (!this.otherDirection) {
-    // Boss schaut nach links → Angriff nach links
     this.x -= step;
   } else {
-    // Boss schaut nach rechts → Angriff nach rechts
     this.x += step;
   }
 }
@@ -249,9 +213,9 @@ followCharacter() {
 
   const char = this.world.character;
 
-  // Horizontal verfolgen
+
   if (char.x > this.x) {
-    this.x += this.speed * 50;   // schneller bewegen → aggressiver Boss
+    this.x += this.speed * 50;   
     this.otherDirection = true;
   } else {
     this.x -= this.speed * 50;

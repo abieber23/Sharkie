@@ -12,6 +12,10 @@ class Character extends MovableObject {
   isSlapAnimation = false;
   slapFrame = 0;
   slapActive = false;
+  isSleeping = false;          
+  sleepFrame = 0;             
+  fullSleepFinished = false;   
+
 
   IMAGES_WALKING = [
     "img/1.Sharkie/3.Swim/1.png",
@@ -249,7 +253,6 @@ class Character extends MovableObject {
       } else {
         clearInterval(interval);
         this.slapActive = false;
-        // this.world.keyboard.ATTACK = false;
         this.isAttacking = false;
       }
     }, 100);
@@ -265,18 +268,65 @@ class Character extends MovableObject {
     return true;
   }
 
-  IDLE() {
-    let idleTime = Date.now() - this.lastActionTime;
-    if (idleTime > 10000) {
-      this.playAnimation(this.IMAGES_SLEEP);
-      Sounds.snore.play();
-    } else {
-      Sounds.snore.pause();
-      Sounds.snore.currentTime = 0;
-      this.playAnimation(this.IMAGES_IDLE);
+
+IDLE() {
+    const idleTime = Date.now() - this.lastActionTime;
+  
+    if (this.isAwake(idleTime)) return this.handleAwakeIdle();
+    this.startSleepIfNeeded();
+    Sounds.snore.play();
+  
+    if (!this.fullSleepFinished) return this.playFullSleep();
+    this.playSleepLoop();
+  }
+
+  isAwake(idleTime) {
+    return idleTime <= 10000;
+  }
+
+  
+  handleAwakeIdle() {
+    this.resetSleepState();
+    Sounds.snore.pause();
+    Sounds.snore.currentTime = 0;
+    this.playAnimation(this.IMAGES_IDLE);
+  }
+  
+  resetSleepState() {
+    this.isSleeping = false;
+    this.fullSleepFinished = false;
+    this.sleepFrame = 0;
+  }
+  
+  startSleepIfNeeded() {
+    if (!this.isSleeping) {
+      this.isSleeping = true;
+      this.fullSleepFinished = false;
+      this.sleepFrame = 0;
     }
   }
 
+  playFullSleep() {
+    if (this.sleepFrame < this.IMAGES_SLEEP.length) {
+      this.setSleepFrame(this.sleepFrame++);
+    } else {
+      this.fullSleepFinished = true;
+      this.sleepFrame = this.IMAGES_SLEEP.length - 4;
+    }
+  }
+  playSleepLoop() {
+    const loopStart = this.IMAGES_SLEEP.length - 4;
+    const frame = loopStart + ((this.sleepFrame - loopStart) % 4);
+    this.setSleepFrame(frame);
+    this.sleepFrame++;
+  }
+  
+  setSleepFrame(i) {
+    const path = this.IMAGES_SLEEP[i];
+    this.img = this.imageCache[path];
+  }
+  
+  
   isPoison() {
     return this.world.statusBarPoison.percentage_poison > 0;
   }
