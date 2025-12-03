@@ -12,12 +12,16 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: url('img/3. Background/Background1.png') center;
+    background:
+    linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),
+    url('img/3. Background/Background1.png') center;
     background-size:cover;
     background-color: #004270;
 
     font-size: 16px;
-}
+} 
+
+
 
 html {
   margin: 0;
@@ -220,33 +224,33 @@ text-align: right;
 }
 
 #btn-left {
-  left: 20px;
-  bottom: 35%;
+  left: 10px;
+  bottom: 5%;
 }
 
 #btn-right {
-  left: 100px;
-  bottom: 35%;
+  left: 110px;
+  bottom: 5%;
 }
 
 #btn-jump {
   left: 60px;
-  bottom: 40%;
+  bottom: 13%;
 }
 
 #btn-shoot {
-  right: 20px;
-  bottom: 40%;
+  right: 30px;
+  bottom: 5%;
 }
 
 #btn-slap {
-  right: 20px;
-  bottom: 25%;
+  right: 100px;
+  bottom: 5%;
 }
 
 #btn-pause {
-  right: 20px;
-  bottom: 10%;
+  left: 20px;
+  bottom: 90%;
 }
 
 
@@ -271,5 +275,67 @@ text-align: right;
     width: 45px;
     height: 45px;
     font-size: 20px;
+  }
+}
+
+/* Burger Icon */
+.mobile-menu-icon {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 40px;
+  color: white;
+  z-index: 9999;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.6);
+
+  padding: 4px;
+  border-radius: 28px;
+}
+
+/* Menübox */
+#mobile-menu {
+  display: none;
+  position: fixed;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  top: 70px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 15px;
+  border-radius: 10px;
+  z-index: 9999;
+  text-align: center;
+}
+
+#mobile-menu .menu-icon {
+  width: 60px;
+  margin: 10px 0;
+}
+
+#mobile-menu .menu-btn {
+  width: 100%;
+  height: 50px;
+  font-family: "LuckiestGuy";
+  background: yellow;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+/* MOBILE ONLY */
+@media (max-width: 900px) {
+  .mobile-menu-icon {
+      display: block;
+  }
+
+ 
+  .mute-button,
+  #loud,
+  footer,
+  .fullscreen-button,
+  .instructions-btn {
+      display: none !important;
   }
 }

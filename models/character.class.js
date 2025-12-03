@@ -129,7 +129,6 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_ATTACK_FIN);
     this.loadImages(this.IMAGES_ATTACK_NORMAL);
     this.loadImages(this.IMAGES_ATTACK_POISON);
-
     this.offset = {
       top: 90,
       left: 35,
@@ -180,7 +179,6 @@ class Character extends MovableObject {
     setInterval(() => {
       if (this.world.isPaused) return;
       if (this.isDead()) return;
-
       this.handleMovement();
       this.updateCamera();
     }, 1000 / 60);
@@ -197,13 +195,9 @@ class Character extends MovableObject {
       if (this.handleShooting()) return;
       if (this.handleHurt()) return;
       if (
-        this.world.keyboard.RIGHT ||
-        this.world.keyboard.LEFT ||
-        this.isAboveGround()
+        this.world.keyboard.RIGHT ||this.world.keyboard.LEFT ||this.isAboveGround()
       ) {
-        this.playAnimation(this.IMAGES_WALKING);
-        return;
-      }
+        this.playAnimation(this.IMAGES_WALKING);return;}
       this.IDLE();
     }, 100);
   }
@@ -271,11 +265,9 @@ class Character extends MovableObject {
 
 IDLE() {
     const idleTime = Date.now() - this.lastActionTime;
-  
     if (this.isAwake(idleTime)) return this.handleAwakeIdle();
     this.startSleepIfNeeded();
     Sounds.snore.play();
-  
     if (!this.fullSleepFinished) return this.playFullSleep();
     this.playSleepLoop();
   }
@@ -334,9 +326,7 @@ IDLE() {
   startShoot(isPoison, onFinish) {
     if (this.isAttacking || this.isShooting) return;
     this.isShooting = true;
-    this.shootImages = isPoison
-      ? this.IMAGES_ATTACK_POISON
-      : this.IMAGES_ATTACK_NORMAL;
+    this.shootImages = isPoison ? this.IMAGES_ATTACK_POISON : this.IMAGES_ATTACK_NORMAL;
     this.currentImage = 0;
     const duration = this.shootImages.length * 100 + 50;
     setTimeout(() => {

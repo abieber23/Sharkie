@@ -37,5 +37,4 @@ function createLevel1() {
   );
 }
 
-// optional, falls du level1 irgendwo anders noch direkt brauchst:
 const level1 = createLevel1();

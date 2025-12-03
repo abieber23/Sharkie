@@ -176,7 +176,6 @@ class Endboss extends MovableObject {
 
 playAttackStep() {
   const frames = this.IMAGES_ATTACK.length;
-
   if (this.attackIndex < frames) {
     this.attackStepDirection();
   } else {
@@ -186,7 +185,6 @@ playAttackStep() {
     } else {
       this.x -= this.attackDistance;
     }
-
     this.attackIndex = 0;
     this.playAnimation(this.IMAGES_WALKING);
     this.scheduleNextAttack();
@@ -197,7 +195,6 @@ attackStepDirection() {
   const frames = this.IMAGES_ATTACK.length;
   const step = this.attackDistance / frames;
   const path = this.IMAGES_ATTACK[this.attackIndex++];
-
   this.img = this.imageCache[path];
 
   if (!this.otherDirection) {
@@ -212,8 +209,6 @@ followCharacter() {
   if (!this.world || !this.world.character) return;
 
   const char = this.world.character;
-
-
   if (char.x > this.x) {
     this.x += this.speed * 50;   
     this.otherDirection = true;

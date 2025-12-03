@@ -72,11 +72,13 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backroundObjects);
+
     this.addToMap(this.character);
     this.level.enemies = this.level.enemies.filter((e) => !e.markedForRemoval);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.collectibleObject);
     this.addObjectsToMap(this.throwableObjects);
+    
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusBarLife);
     this.addToMap(this.statusBarCoin);
@@ -101,9 +103,7 @@ class World {
     if (this.endboss && !this.endboss.isDead()) {
         this.addToMap(this.bossHealthBar);
       }
-    // if (this.endboss=null) {
-    //   this.bossHealthBar = null;
-    // }
+
   }
 
   addObjectsToMap(objects) {

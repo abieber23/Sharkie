@@ -1,5 +1,7 @@
 let btnMute = document.getElementById("mute");
 let btnLoud = document.getElementById("loud");
+let btnMuteMobile = document.getElementById("mute-mobile");
+let btnLoudMobile = document.getElementById("loud-mobile");
 
 let canvasElement = document.getElementById("canvas");
 let hint = document.getElementById("fullscreenHint");
@@ -29,18 +31,23 @@ function enterFullscreen() {
   }
 }
 
+
 function toggleMute() {
-  btnMute.classList.toggle("d-none");
-  btnLoud.classList.toggle("d-none");
-  const isMuted = !btnLoud.classList.contains("d-none");
-  localStorage.setItem("isMuted", isMuted ? "1" : "0");
-  for (let key in Sounds) {
-    Sounds[key].muted = isMuted;
+    btnMute.classList.toggle("d-none");
+    btnLoud.classList.toggle("d-none");
+    if (btnMuteMobile && btnLoudMobile) {
+      btnMuteMobile.classList.toggle("d-none");
+      btnLoudMobile.classList.toggle("d-none");
+    }
+    const isMuted = !btnLoud.classList.contains("d-none");
+    localStorage.setItem("isMuted", isMuted ? "1" : "0");
+    for (let key in Sounds) {
+      Sounds[key].muted = isMuted;
+    }
+    if (window.world && world.applyMuteState) {
+      world.applyMuteState(isMuted);
+    }
   }
-  if (window.world && world.applyMuteState) {
-    world.applyMuteState(isMuted);
-  }
-}
 
 function loadMuteFromStorage() {
   const saved = localStorage.getItem("isMuted");
@@ -164,23 +171,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const mobileControls = document.getElementById("mobile-controls");
 
-// function isMobileDevice() {
-//     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-//                         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  
-//     const hasTouch = navigator.maxTouchPoints > 0;
-//     const smallScreen = window.innerWidth < 900;
-  
-//     return hasTouch || smallScreen || isIOSDevice;
-//   }
-  
   
 function isMobileDevice() {
     return navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)
         || window.matchMedia("(pointer: coarse)").matches;
 }
-
-
 
 
   function updateMobileControls() {
@@ -194,6 +189,9 @@ function isMobileDevice() {
 window.addEventListener("resize", updateMobileControls);
 updateMobileControls();
 
-
+function toggleMenu() {
+    let menu = document.getElementById("mobile-menu");
+    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
   
 

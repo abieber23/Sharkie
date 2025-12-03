@@ -31,6 +31,18 @@
 <h1>Sharky</h1>
 
 
+<div class="mobile-menu-icon" onclick="toggleMenu()">
+  ☰
+</div>
+
+<div id="mobile-menu">
+  <img src="img/6.Botones/sound (1).png" id="loud-mobile" class="menu-icon" onclick="toggleMute()">
+  <img src="img/6.Botones/mute (1).png" id="mute-mobile" class="menu-icon d-none" onclick="toggleMute()">
+  <img src="img/6.Botones/Full Screen/Mesa de trabajo 6.png" style="width: 200px;" class="menu-icon" onclick="toggleFullscreen()">
+  <button onclick="openModal()" class="menu-btn">INSTRUCTIONS</button>
+  <a style="margin-top: 20px;" href="impressum.html"> Impressum</a>
+</div>
+
 
 <div id="game-wrapper">
     <canvas id="canvas" width="720" height="480"></canvas>
@@ -44,6 +56,7 @@
     class="fullscreen-button"
     onclick="toggleFullscreen()" >
   <button class="instructions-btn" id="instructions" onclick="openModal()">INSTRUCTIONS</button>
+  
 
   <div id="mobile-controls">
     <button id="btn-left">◀</button>
