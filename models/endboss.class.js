@@ -84,6 +84,11 @@ class Endboss extends MovableObject {
     this.animate();
   }
 
+  /**
+ * Runs enemy animation loop.
+ * Prioritizes death, hurt, spawn, and attack states before walking.
+ * Also moves vertically and follows the player.
+ */
   animate() {
     setInterval(() => {
       if (this.handleDeath()) return;
@@ -97,6 +102,11 @@ class Endboss extends MovableObject {
     }, 150);
   }
 
+  /**
+ * Handles enemy death state.
+ * Plays death animation and disables attacking.
+ * @returns {boolean} True if death was handled.
+ */
   handleDeath() {
     if (!this.isDead()) return false;
     this.playDeathAnimation();
@@ -104,12 +114,22 @@ class Endboss extends MovableObject {
     return true;
   }
 
+  /**
+ * Handles hurt animation if active.
+ * Plays the hurt sequence once.
+ * @returns {boolean} True if hurt animation ran.
+ */
   handleHurt() {
     if (!this.isHurtAnimation) return false;
     this.playHurtOnce();
     return true;
   }
 
+  /**
+ * Handles spawn animation.
+ * Plays spawn sequence once and triggers entry sound.
+ * @returns {boolean} True if spawn animation ran.
+ */
   handleSpawn() {
     if (!this.spawning) return false;
     this.playSpawnOnce();
@@ -117,12 +137,21 @@ class Endboss extends MovableObject {
     return true;
   }
 
+  /**
+ * Handles attack animation step.
+ * Executes one attack frame/step if attacking.
+ * @returns {boolean} True if attack animation ran.
+ */
   handleAttack() {
     if (!this.attacking) return false;
     this.playAttackStep();
     return true;
   }
 
+  /**
+ * Plays the hurt animation once.
+ * Advances frames, then resets flags when finished.
+ */
   playHurtOnce() {
     if (this.hurtFrame < this.IMAGES_HURT.length) {
       const path = this.IMAGES_HURT[this.hurtFrame];
@@ -134,6 +163,10 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+ * Plays the death animation frame-by-frame.
+ * Removes the enemy once the final frame is reached.
+ */
   playDeathAnimation() {
     if (this.deadImageIndex < this.IMAGES_DEATH.length) {
       const path = this.IMAGES_DEATH[this.deadImageIndex];
@@ -143,10 +176,18 @@ class Endboss extends MovableObject {
       this.remove();
     }
   }
+
+  /**
+ * Marks the enemy for removal from the game world.
+ */
   remove() {
     this.markedForRemoval = true;
   }
 
+  /**
+ * Plays the spawn animation once.
+ * Resets spawn state and schedules next attack when finished.
+ */
   playSpawnOnce() {
     if (this.spawnIndex < this.IMAGES_SPAWN.length) {
       const path = this.IMAGES_SPAWN[this.spawnIndex];
@@ -159,6 +200,10 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+ * Schedules the next enemy attack after a random delay.
+ * Skips scheduling if enemy is dead.
+ */
   scheduleNextAttack() {
     if (this.isDead()) return;
     const delay = 1000 + Math.random() * 2000;
@@ -167,13 +212,20 @@ class Endboss extends MovableObject {
     }, delay);
   }
 
+  /**
+ * Initiates an attack if the enemy is alive, not spawning, and not already attacking.
+ */
   startAttack() {
     if (this.spawning || this.isDead() || this.attacking) return;
     this.attacking = true;
     this.attackIndex = 0;
   }
 
-
+/**
+ * Plays a single attack animation step.
+ * Moves forward after the final frame, resets attack state,
+ * resumes walking animation, and schedules the next attack.
+ */
 playAttackStep() {
   const frames = this.IMAGES_ATTACK.length;
   if (this.attackIndex < frames) {
@@ -191,12 +243,15 @@ playAttackStep() {
   }
 }
 
+/**
+ * Executes one attack frame and moves the enemy slightly.
+ * Advances animation index and shifts position based on direction.
+ */
 attackStepDirection() {
   const frames = this.IMAGES_ATTACK.length;
   const step = this.attackDistance / frames;
   const path = this.IMAGES_ATTACK[this.attackIndex++];
   this.img = this.imageCache[path];
-
   if (!this.otherDirection) {
     this.x -= step;
   } else {
@@ -204,10 +259,12 @@ attackStepDirection() {
   }
 }
 
-
+/**
+ * Moves the enemy toward the player character.
+ * Adjusts direction and shifts position based on relative X position.
+ */
 followCharacter() {
   if (!this.world || !this.world.character) return;
-
   const char = this.world.character;
   if (char.x > this.x) {
     this.x += this.speed * 50;   
@@ -216,7 +273,6 @@ followCharacter() {
     this.x -= this.speed * 50;
     this.otherDirection = false; 
   }
-
 }
 }
 

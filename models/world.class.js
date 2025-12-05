@@ -64,26 +64,51 @@ class World {
     this.character.world = this;
   }
 
-  draw() {
-    if (!this.gameStarted) {
-      drawStartScreen(this);
-      return requestAnimationFrame(() => this.draw());
-    }
+draw() {
+    if (!this.gameStarted) return this.drawStartLoop();
+    this.prepareFrame();
+    this.drawWorld();
+    this.drawHUD();
+    this.handleBossLogic();
+    this.drawEndScreensIfNeeded();
+    this.handlePauseInput();
+    this.scheduleNextFrame();
+  }
+
+  drawStartLoop() {
+    drawStartScreen(this);
+    return requestAnimationFrame(() => this.draw());
+  }
+  
+  prepareFrame() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
+  }
+  
+  drawWorld() {
     this.addObjectsToMap(this.level.backroundObjects);
-
     this.addToMap(this.character);
-    this.level.enemies = this.level.enemies.filter((e) => !e.markedForRemoval);
+    this.level.enemies = this.level.enemies.filter(e => !e.markedForRemoval);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.collectibleObject);
     this.addObjectsToMap(this.throwableObjects);
-    
     this.ctx.translate(-this.camera_x, 0);
+  }
+  
+  drawHUD() {
     this.addToMap(this.statusBarLife);
     this.addToMap(this.statusBarCoin);
     this.addToMap(this.statusBarPoison);
+  }
+  
+  handleBossLogic() {
     this.checkBossSpawn();
+    if (this.endboss && !this.endboss.isDead()) {
+      this.addToMap(this.bossHealthBar);
+    }
+  }
+  
+  drawEndScreensIfNeeded() {
     if (!this.gameWon && this.endboss && this.endboss.isDead()) {
       this.gameWon = true;
       Sounds.win.play();
@@ -93,19 +118,18 @@ class World {
     } else if (this.character.deathAnimationFinished) {
       drawEndScreen(this, this.gameOverImg);
     }
+  }
+
+  handlePauseInput() {
     if (this.keyboard.PAUSE) {
       this.togglePause();
     }
-    let self = this;
-    requestAnimationFrame(function () {
-      self.draw();
-    });
-    if (this.endboss && !this.endboss.isDead()) {
-        this.addToMap(this.bossHealthBar);
-      }
-
   }
-
+  
+  scheduleNextFrame() {
+    requestAnimationFrame(() => this.draw());
+  }
+  
   addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o);
@@ -127,13 +151,17 @@ class World {
 
   togglePause() {
     this.isPaused = !this.isPaused;
+  
     if (this.isPaused) {
       for (let s in Sounds) {
         Sounds[s].pause();
       }
+    } else {
+      Sounds.background.play();
+      this.backgroundPlaying = true;
     }
   }
-
+  
   checkCollisions() {
     this.collisionTimer = setInterval(() => {
       if (this.isPaused) return;
@@ -198,7 +226,6 @@ class World {
       enemy.energy -= 40;
     }
     this.updateBossHealth(enemy);
-
     Sounds.enemy_hurt.play();
   }
 
@@ -377,6 +404,7 @@ class World {
     this.statusBarLife = new StatusBar("life", 100, 20, 0);
     this.statusBarCoin = new StatusBar("coins", 0, 20, 50);
     this.statusBarPoison = new StatusBar("poison", 0, 20, 100);
+    this.bossHealthBar = new StatusBar("life", 100, 450, 0);
   }
 
   resetCollectibles() {
@@ -396,6 +424,7 @@ class World {
       if (e.startBehavior) e.startBehavior();
     });
   }
+
   applyMuteState(isMuted) {
     for (let key in Sounds) {
       Sounds[key].muted = isMuted;

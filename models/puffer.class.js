@@ -32,6 +32,11 @@ class Puffer extends MovableObject {
     };
   }
 
+  /**
+ * Starts movement and death behavior loops.
+ * Moves left and animates walking; plays death animation when dead.
+ */
+
   startBehavior() {
     this.moveAnimInterval = setInterval(() => {
       if (this.world?.isPaused) return;
@@ -42,13 +47,16 @@ class Puffer extends MovableObject {
     }, 1000 / 15);
     this.deathInterval = setInterval(() => {
       if (this.world?.isPaused) return;
-
       if (this.isDead()) {
         this.playDeathAnimation(this.IMAGES_DEAD);
       }
     }, 200);
   }
 
+  /**
+ * Plays death animation frame-by-frame.
+ * Removes the object after the final frame.
+ */
   playDeathAnimation() {
     if (this.deadImageIndex < this.IMAGES_DEAD.length) {
       const path = this.IMAGES_DEAD[this.deadImageIndex];
@@ -59,6 +67,9 @@ class Puffer extends MovableObject {
     }
   }
 
+  /**
+ * Flags the object for removal from the world.
+ */
   remove() {
     this.markedForRemoval = true;
   }

@@ -31,6 +31,10 @@ class ThrowableObject extends MovableObject {
     this.throw();
   }
 
+  /**
+ * Throws the object forward.
+ * Applies gravity and moves horizontally based on facing direction.
+ */
   throw() {
     this.speedY = 10;
     this.applyGravity();

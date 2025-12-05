@@ -49,30 +49,51 @@ class StatusBar extends DrawableObject {
     if (this.type === "boss") this.setPercentageBoss(start);
   }
 
+  /**
+ * Updates life bar percentage and sets corresponding image.
+ * @param {number} percentage - Life percentage (0–100).
+ */
   setPercentageLife(percentage) {
     this.percentage_life = percentage;
     let path = this.IMAGES_LIFE[this.resolveImageIndex(percentage)];
     this.img = this.imageCache[path];
   }
 
+  /**
+ * Updates coin bar percentage and sets corresponding image.
+ * @param {number} percentage - Coin percentage (0–100).
+ */
   setPercentageCoin(percentage) {
     this.percentage_coin = percentage;
     let path = this.IMAGES_COINS[this.resolveImageIndex(percentage)];
     this.img = this.imageCache[path];
   }
 
+  /**
+ * Updates poison bar percentage and sets corresponding image.
+ * @param {number} percentage - Poison percentage (0–100).
+ */
   setPercentagePoison(percentage) {
     this.percentage_poison = percentage;
     let path = this.IMAGES_POISON[this.resolveImageIndex(percentage)];
     this.img = this.imageCache[path];
   }
 
+  /**
+ * Updates boss life bar percentage and sets corresponding image.
+ * @param {number} percentage - Boss health percentage (0–100).
+ */
   setPercentageBoss(percentage) {
     this.percentage_boss = percentage;
     let path = this.IMAGES_LIFE[this.resolveImageIndex(percentage)];
     this.img = this.imageCache[path];
   }
 
+  /**
+ * Maps a percentage value to an image index (0–5).
+ * @param {number} percentage - Value to evaluate.
+ * @returns {number} Index of the corresponding image.
+ */
   resolveImageIndex(percentage) {
     if (percentage == 100) {
       return 5;

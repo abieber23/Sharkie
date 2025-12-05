@@ -31,12 +31,15 @@ class Jellyfish extends MovableObject {
     };
   }
 
+  /**
+ * Starts movement and animation behavior loops.
+ * Moves vertically at 60 FPS and plays walking/death animations.
+ */
   startBehavior() {
     this.moveInterval = setInterval(() => {
       if (this.world?.isPaused) return;
       this.moveUpDown(480);
     }, 1000 / 60);
-
     this.animationInterval = setInterval(() => {
       if (this.world?.isPaused) return;
       if (!this.isDead()) this.playAnimation(this.IMAGES_WALKING);
@@ -46,6 +49,10 @@ class Jellyfish extends MovableObject {
     }, 100);
   }
 
+  /**
+ * Plays death animation frame-by-frame.
+ * Removes the entity once the last frame is reached.
+ */
   playDeathAnimation() {
     if (this.deadImageIndex < this.IMAGES_DEAD.length) {
       const path = this.IMAGES_DEAD[this.deadImageIndex];
@@ -56,6 +63,9 @@ class Jellyfish extends MovableObject {
     }
   }
 
+  /**
+ * Marks this entity for removal from the game world.
+ */
   remove() {
     this.markedForRemoval = true;
   }
