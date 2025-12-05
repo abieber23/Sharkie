@@ -9,7 +9,7 @@ function init() {
 
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space" || e.code === "ArrowUp" || e.code === "ArrowDown") {
-    e.preventDefault(); // verhindert Scrollen
+    e.preventDefault(); 
   }
   if (e.code === "ArrowLeft") keyboard.LEFT = true;
   if (e.code === "ArrowRight") keyboard.RIGHT = true;

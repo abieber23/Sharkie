@@ -139,12 +139,19 @@ class Character extends MovableObject {
     this.animate();
   }
 
+  /**
+ * Handles all player movement actions (right, left, jump).
+ */
   handleMovement() {
     this.handleRightMovement();
     this.handleLeftMovement();
     this.handleJump();
   }
 
+/**
+ * Moves the player right if allowed.
+ * Plays swim sound, updates direction and action timestamp.
+ */
   handleRightMovement() {
     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
       this.moveRight();
@@ -154,6 +161,10 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+ * Moves the player left if allowed.
+ * Plays swim sound, updates direction and action timestamp.
+ */
   handleLeftMovement() {
     if (this.world.keyboard.LEFT && this.x > 0) {
       this.moveLeft();
@@ -163,6 +174,10 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+ * Handles jump input.
+ * Initiates jump, plays sound, updates action timestamp.
+ */
   handleJump() {
     if (this.world.keyboard.UP && this.y > 0) {
       this.jump();
@@ -175,6 +190,11 @@ class Character extends MovableObject {
     this.world.camera_x = -this.x + 50;
   }
 
+  /**
+ * Main animation loop setup.
+ * Runs movement & camera updates at 60 FPS unless paused or dead,
+ * then starts the sprite animation loop.
+ */
   animate() {
     setInterval(() => {
       if (this.world.isPaused) return;
@@ -182,10 +202,13 @@ class Character extends MovableObject {
       this.handleMovement();
       this.updateCamera();
     }, 1000 / 60);
-
     this.startAnimationLoop();
   }
 
+  /**
+ * Handles character animation states in a timed loop.
+ * Skips when paused/dead and checks slap, shooting, hurt, movement, or idle.
+ */
   startAnimationLoop() {
     setInterval(() => {
       if (this.world.isPaused) return;
@@ -202,18 +225,26 @@ class Character extends MovableObject {
     }, 100);
   }
 
+  /**
+ * Handles hurt animation and sound.
+ * Chooses correct hurt images, updates action time.
+ * @returns {boolean} True if hurt animation was played.
+ */
   handleHurt() {
     if (!this.isHurt()) return false;
     const imgs =
-      this.hurtType === "electro"
-        ? this.IMAGES_HURT_ELECTRIC
-        : this.IMAGES_HURT;
+      this.hurtType === "electro"   ? this.IMAGES_HURT_ELECTRIC   : this.IMAGES_HURT;
     this.playAnimation(imgs);
     this.lastActionTime = Date.now();
     Sounds.hurt.play();
     return true;
   }
 
+  /**
+ * Handles death animation and sounds.
+ * Plays death sequence once and marks it finished.
+ * @returns {boolean} True if death handling occurred.
+ */
   handleDeath() {
     if (!this.isDead()) return false;
     this.playAnimationOnce(this.IMAGES_DEAD);
@@ -225,12 +256,16 @@ class Character extends MovableObject {
     return true;
   }
 
+  /**
+ * Initiates fin slap attack.
+ * Starts slap animation, plays sound, sets attack state.
+ * @returns {boolean} True if slap was triggered.
+ */
   handleFinSlap() {
     if (!this.world.keyboard.ATTACK || this.slapActive) return false;
     this.slapActive = true;
     this.slapFrame = 0;
     this.isAttacking = true;
-    console.log("slap");
     this.world.keyboard.ATTACK = false;
     Sounds.slap.play();
     this.runSlapAnimation();
@@ -238,6 +273,10 @@ class Character extends MovableObject {
     return true;
   }
 
+  /**
+ * Plays fin slap animation frame-by-frame.
+ * Resets slap and attack states when finished.
+ */
   runSlapAnimation() {
     const interval = setInterval(() => {
       if (this.slapFrame < this.IMAGES_ATTACK_FIN.length) {
@@ -252,6 +291,11 @@ class Character extends MovableObject {
     }, 100);
   }
 
+  /**
+ * Handles shooting animation.
+ * Plays shot sequence once and resets frame index.
+ * @returns {boolean} True if shooting animation ran.
+ */
   handleShooting() {
     if (!this.isShooting) return false;
     this.playAnimationOnce(this.shootImages);
@@ -262,7 +306,10 @@ class Character extends MovableObject {
     return true;
   }
 
-
+  /**
+ * Handles idle behavior based on inactivity time.
+ * Switches between awake idle, sleep start, full sleep, and sleep loop.
+ */
 IDLE() {
     const idleTime = Date.now() - this.lastActionTime;
     if (this.isAwake(idleTime)) return this.handleAwakeIdle();
@@ -272,11 +319,19 @@ IDLE() {
     this.playSleepLoop();
   }
 
+  /**
+ * Checks if the character is still awake based on idle time.
+ * @param {number} idleTime - Time since last action.
+ * @returns {boolean} True if idle time is within awake threshold.
+ */
   isAwake(idleTime) {
     return idleTime <= 10000;
   }
 
-  
+  /**
+ * Plays the awake idle animation and resets all sleep states.
+ * Stops snore sound and resets its playback position.
+ */
   handleAwakeIdle() {
     this.resetSleepState();
     Sounds.snore.pause();
@@ -284,12 +339,19 @@ IDLE() {
     this.playAnimation(this.IMAGES_IDLE);
   }
   
+  /**
+ * Resets all sleep-related state flags and counters.
+ */
   resetSleepState() {
     this.isSleeping = false;
     this.fullSleepFinished = false;
     this.sleepFrame = 0;
   }
   
+  /**
+ * Initiates sleep state if not already sleeping.
+ * Resets full sleep flags and frame counter.
+ */
   startSleepIfNeeded() {
     if (!this.isSleeping) {
       this.isSleeping = true;
@@ -298,6 +360,10 @@ IDLE() {
     }
   }
 
+  /**
+ * Plays the full sleep animation sequence.
+ * Advances frames until complete, then marks full sleep as finished.
+ */
   playFullSleep() {
     if (this.sleepFrame < this.IMAGES_SLEEP.length) {
       this.setSleepFrame(this.sleepFrame++);
@@ -306,6 +372,11 @@ IDLE() {
       this.sleepFrame = this.IMAGES_SLEEP.length - 4;
     }
   }
+
+  /**
+ * Plays the looping part of the sleep animation.
+ * Cycles through the last 4 sleep frames.
+ */
   playSleepLoop() {
     const loopStart = this.IMAGES_SLEEP.length - 4;
     const frame = loopStart + ((this.sleepFrame - loopStart) % 4);
@@ -313,16 +384,29 @@ IDLE() {
     this.sleepFrame++;
   }
   
+  /**
+ * Sets the current sleep animation frame by index.
+ */
   setSleepFrame(i) {
     const path = this.IMAGES_SLEEP[i];
     this.img = this.imageCache[path];
   }
   
-  
+  /**
+ * Checks if the character is poisoned.
+ * @returns {boolean} True if poison level is above 0.
+ */
   isPoison() {
     return this.world.statusBarPoison.percentage_poison > 0;
   }
 
+  /**
+ * Starts a shooting attack.
+ * Chooses poison or normal animation, runs timed sequence,
+ * then resets state and calls `onFinish` if provided.
+ * @param {boolean} isPoison - Whether to use the poison attack images.
+ * @param {Function} onFinish - Callback fired after shooting ends.
+ */
   startShoot(isPoison, onFinish) {
     if (this.isAttacking || this.isShooting) return;
     this.isShooting = true;

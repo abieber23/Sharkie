@@ -23,13 +23,11 @@ class CollectableObject extends MovableObject {
     this.type = type;
     this.loadImages(this.IMAGES_COIN);
     this.loadImages(this.IMAGES_POISON);
-
     if (this.type === "coin") {
       this.loadImage(this.IMAGES_COIN[0]);
     } else {
       this.loadImage(this.IMAGES_POISON[0]);
     }
-
     this.x = 100 + Math.random() * 2000;
     this.y = 100 + Math.random() * 300;
     this.height = 50;
@@ -37,6 +35,10 @@ class CollectableObject extends MovableObject {
     this.animateCollect();
   }
 
+  /**
+ * Animates collectible items.
+ * Coins animate every 300ms, poison every 200ms.
+ */
   animateCollect() {
     if (this.type === "coin") {
       setInterval(() => {
