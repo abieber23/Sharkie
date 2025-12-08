@@ -1,3 +1,5 @@
+import { World } from "../models/world.js";
+
 let canvas;
 let world;
 let keyboard = new Keyboard();
@@ -5,7 +7,12 @@ let keyboard = new Keyboard();
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
+  // Expose for non-module scripts (general.js uses them)
+  window.world = world;
+  window.keyboard = keyboard;
 }
+// Make init callable from onload attribute
+window.init = init;
 
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space" || e.code === "ArrowUp" || e.code === "ArrowDown") {

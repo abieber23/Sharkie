@@ -35,11 +35,7 @@ class DrawableObject {
 
   drawFrame(ctx) {
     if (
-      this instanceof Character ||
-      this instanceof Puffer ||
-      this instanceof Endboss ||
-      this instanceof ThrowableObject ||
-      this instanceof CollectableObject
+      this instanceof Character || this instanceof Puffer || this instanceof Endboss || this instanceof ThrowableObject || this instanceof CollectableObject
     ) {
       ctx.beginPath();
       ctx.lineWidth = "2";
