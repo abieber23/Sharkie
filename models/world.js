@@ -1,8 +1,4 @@
-/* --------------------------------------
-   IMPORT MODULE METHODS
----------------------------------------*/
 
-// Drawing / Rendering
 import {
   draw,
   drawStartLoop,
@@ -18,7 +14,6 @@ import {
   togglePause
 } from "./world.draw.js";
 
-// Enemy Collisions
 import {
   checkCollisions,
   processEnemyCollision,
@@ -34,7 +29,6 @@ import {
 } from "./world.collision.js";
 
 
-// Throwing Objects
 import {
   checkThrowObjects,
   canThrowBubble,
@@ -42,42 +36,12 @@ import {
   startThrowAnimation
 } from "./world.throw.js";
 
-// Collectibles
-// import {
-//   checkCollectableCollisions,
-//   processCollectableCollision,
-//   handleCollectable
-// } from "./world.collectibles.js";
-
-// Boss System
-// import {
-//   checkBossSpawn
-// } from "./world.boss.js";
-
-// Game Flow: Win, Restart, Reset
-// import {
-//   checkGameOver,
-//   checkWin,
-//   restartGame,
-//   resetWorldState,
-//   resetCharacter,
-//   loadLevel,
-//   resetStatusBars,
-//   resetCollectibles,
-//   initializeEnemies
-// } from "./world.gameflow.js";
-
-// Sound Control
 import {
   applyMuteState,
   playBackgroundSound,
   stopBackgroundSound
 } from "./world.sounds.js";
 
-
-/* --------------------------------------
-   WORLD CLASS (MINIMAL + ATTRIBUTES)
----------------------------------------*/
 
 export class World {
 
@@ -123,41 +87,28 @@ export class World {
 
 
   constructor(canvas, keyboard) {
-
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
-
     this.level = createLevel1();
-
-    // Assign "world" to enemies
     this.level.enemies.forEach(e => {
       e.world = this;
       if (e.startBehavior) e.startBehavior();
     });
-
-    // Load UI images
     this.gameOverImg.src = "img/6.Botones/Tittles/Game Over/Recurso 9.png";
     this.tryAgainImg.src = "img/6.Botones/Try again/Recurso 15.png";
     this.winImg.src = "img/6.Botones/Tittles/You win/Recurso 22.png";
     this.startImg.src = "img/6.Botones/Start/3.png";
-
-    // Canvas interactions
     this.canvas.addEventListener("click", () => this.handleCanvasClick());
-
-    // Start main systems
     this.bossHealthBar = new StatusBar("life", 100, 450, 0);
-
     this.draw();
     this.setWorld();
-
     this.checkThrowObjects();
     this.checkCollisions();
     this.checkProjectileCollisions();
     this.checkCollectableCollisions();
   }
 
-  // Stays inside the class
   setWorld() {
     this.character.world = this;
   }
@@ -349,14 +300,8 @@ export class World {
 }
 
 
-
-/* --------------------------------------
-   MERGE IMPORTED METHODS INTO CLASS
----------------------------------------*/
-
 Object.assign(World.prototype, {
 
-  // Draw Cycle
   draw,
   drawStartLoop,
   prepareFrame,
@@ -370,14 +315,12 @@ Object.assign(World.prototype, {
   addToMap,
   togglePause,
 
-  // Enemy Collisions
   checkCollisions,
   processEnemyCollision,
   shouldProcessCollision,
   handleAttackCollision,
   handleCharacterDamage,
 
-  // Projectile Collisions
   checkProjectileCollisions,
   processProjectileCollision,
   applyProjectileDamage,
@@ -385,32 +328,11 @@ Object.assign(World.prototype, {
   applyEndbossHurtState,
   removeMarkedProjectiles,
 
-  // Throwing Objects
   checkThrowObjects,
   canThrowBubble,
   createBubble,
   startThrowAnimation,
 
-  // Collectibles
-//   checkCollectableCollisions,
-//   processCollectableCollision,
-//   handleCollectable,
-
-  // Boss
-//   checkBossSpawn,
-
-  // Game Flow
-//   checkGameOver,
-//   checkWin,
-//   restartGame,
-//   resetWorldState,
-//   resetCharacter,
-//   loadLevel,
-//   resetStatusBars,
-//   resetCollectibles,
-//   initializeEnemies,
-
-  // Sound
   applyMuteState,
   playBackgroundSound,
   stopBackgroundSound,
