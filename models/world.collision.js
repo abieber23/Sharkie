@@ -2,14 +2,14 @@
  * Periodically checks collisions with enemies.
  * Skips processing when paused.
  */
-export function  checkCollisions() {
-    this.collisionTimer = setInterval(() => {
-      if (this.isPaused) return;
-      this.level.enemies.forEach((enemy) => {
-        this.processEnemyCollision(enemy);
-      });
-    }, 1000);
-  }
+export function checkCollisions() {
+  this.collisionTimer = setInterval(() => {
+    if (this.isPaused) return;
+    this.level.enemies.forEach((enemy) => {
+      this.processEnemyCollision(enemy);
+    });
+  }, 1000 / 2);
+}
 
   /**
  * Handles collision logic with a single enemy.

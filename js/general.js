@@ -130,8 +130,9 @@ const btnPause = document.getElementById("btn-pause");
 /**
  * Adds press-and-hold behavior to a button.
  * Triggers `onDown` on press (mouse/touch) and `onUp` on release/leave.
+ * `onUp` is optional; defaults to a no-op.
  */
-function holdButton(btn, onDown, onUp) {
+function holdButton(btn, onDown, onUp = () => {}) {
   if (!btn) return;
 
   // Maus
@@ -168,35 +169,35 @@ function holdButton(btn, onDown, onUp) {
   );
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  if (typeof keyboard !== "undefined") {
-    holdButton(
-      btnLeft,
-      () => (keyboard.LEFT = true),
-      () => (keyboard.LEFT = false)
-    );
-    holdButton(
-      btnRight,
-      () => (keyboard.RIGHT = true),
-      () => (keyboard.RIGHT = false)
-    );
-    holdButton(
-      btnJump,
-      () => (keyboard.UP = true),
-      () => (keyboard.UP = false)
-    );
-    holdButton(
-      btnShoot,
-      () => (keyboard.SPACE = true),
-      () => (keyboard.SPACE = false)
-    );
-    holdButton(
-      btnSlap,
-      () => (keyboard.ATTACK = true),
-      () => (keyboard.ATTACK = false)
-    );
-    holdButton(btnPause, () => world.togglePause());
-  }
+// Bind mobile controls after the game (and globals world/keyboard) is ready
+window.addEventListener("load", () => {
+  if (typeof keyboard === "undefined") return;
+  holdButton(
+    btnLeft,
+    () => (keyboard.LEFT = true),
+    () => (keyboard.LEFT = false)
+  );
+  holdButton(
+    btnRight,
+    () => (keyboard.RIGHT = true),
+    () => (keyboard.RIGHT = false)
+  );
+  holdButton(
+    btnJump,
+    () => (keyboard.UP = true),
+    () => (keyboard.UP = false)
+  );
+  holdButton(
+    btnShoot,
+    () => (keyboard.SPACE = true),
+    () => (keyboard.SPACE = false)
+  );
+  holdButton(
+    btnSlap,
+    () => (keyboard.ATTACK = true),
+    () => (keyboard.ATTACK = false)
+  );
+  holdButton(btnPause, () => world.togglePause());
 });
 
 const mobileControls = document.getElementById("mobile-controls");
