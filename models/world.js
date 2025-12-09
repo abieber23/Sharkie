@@ -95,19 +95,28 @@ export class World {
       e.world = this;
       if (e.startBehavior) e.startBehavior();
     });
+    this.loadUIImages();
+    this.canvas.addEventListener("click", () => this.handleCanvasClick());
+    this.bossHealthBar = new StatusBar("life", 100, 450, 0);
+    this.initWorldSystems()
+  }
+
+  initWorldSystems() {
+  this.draw();
+  this.setWorld();
+  this.checkThrowObjects();
+  this.checkCollisions();
+  this.checkProjectileCollisions();
+  this.checkCollectableCollisions();
+}
+
+loadUIImages() {
     this.gameOverImg.src = "img/6.Botones/Tittles/Game Over/Recurso 9.png";
     this.tryAgainImg.src = "img/6.Botones/Try again/Recurso 15.png";
     this.winImg.src = "img/6.Botones/Tittles/You win/Recurso 22.png";
     this.startImg.src = "img/6.Botones/Start/3.png";
-    this.canvas.addEventListener("click", () => this.handleCanvasClick());
-    this.bossHealthBar = new StatusBar("life", 100, 450, 0);
-    this.draw();
-    this.setWorld();
-    this.checkThrowObjects();
-    this.checkCollisions();
-    this.checkProjectileCollisions();
-    this.checkCollectableCollisions();
-  }
+}
+
 
   setWorld() {
     this.character.world = this;
