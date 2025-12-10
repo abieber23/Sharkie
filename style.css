@@ -21,8 +21,6 @@ body {
     font-size: 16px;
 } 
 
-
-
 html {
   margin: 0;
   padding: 0;
@@ -307,7 +305,6 @@ padding: 5px !important;
   }
 }
 
-/* Burger Icon */
 .mobile-menu-icon {
   display: none;
   position: fixed;
@@ -327,7 +324,7 @@ padding: 5px !important;
   display: block;
 }
 
-/* Menübox */
+
 #mobile-menu {
   display: none;
   position: fixed;

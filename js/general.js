@@ -134,22 +134,6 @@ const btnPause = document.getElementById("btn-pause");
  */
 function holdButton(btn, onDown, onUp = () => {}) {
   if (!btn) return;
-
-  // Maus
-  // btn.addEventListener("mousedown", (e) => {
-  //   e.preventDefault();
-  //   onDown();
-  // });
-  // btn.addEventListener("mouseup", (e) => {
-  //   e.preventDefault();
-  //   onUp();
-  // });
-  // btn.addEventListener("mouseleave", (e) => {
-  //   e.preventDefault();
-  //   onUp();
-  // });
-
-  // Touch
   btn.addEventListener(
     "touchstart",
     (e) => {
@@ -158,7 +142,7 @@ function holdButton(btn, onDown, onUp = () => {}) {
     },
     { passive: false }
   );
-
+  
   btn.addEventListener(
     "touchend",
     (e) => {
@@ -169,36 +153,26 @@ function holdButton(btn, onDown, onUp = () => {}) {
   );
 }
 
-// Bind mobile controls after the game (and globals world/keyboard) is ready
+
 window.addEventListener("load", () => {
   if (typeof keyboard === "undefined") return;
-  holdButton(
-    btnLeft,
-    () => (keyboard.LEFT = true),
-    () => (keyboard.LEFT = false)
-  );
-  holdButton(
-    btnRight,
-    () => (keyboard.RIGHT = true),
-    () => (keyboard.RIGHT = false)
-  );
-  holdButton(
-    btnJump,
-    () => (keyboard.UP = true),
-    () => (keyboard.UP = false)
-  );
-  holdButton(
-    btnShoot,
-    () => (keyboard.SPACE = true),
-    () => (keyboard.SPACE = false)
-  );
-  holdButton(
-    btnSlap,
-    () => (keyboard.ATTACK = true),
-    () => (keyboard.ATTACK = false)
-  );
+
+  bindKeyboardButton(btnLeft, "LEFT");
+  bindKeyboardButton(btnRight, "RIGHT");
+  bindKeyboardButton(btnJump, "UP");
+  bindKeyboardButton(btnShoot, "SPACE");
+  bindKeyboardButton(btnSlap, "ATTACK");
   holdButton(btnPause, () => world.togglePause());
 });
+
+
+function bindKeyboardButton(button, keyName) {
+  holdButton(
+    button,
+    () => (keyboard[keyName] = true),
+    () => (keyboard[keyName] = false)
+  );
+}
 
 const mobileControls = document.getElementById("mobile-controls");
 

@@ -206,7 +206,6 @@ loadUIImages() {
     return false;
   }
 
-  // Stays inside the class
   handleCanvasClick() {
     if (!this.gameStarted && this.startButton) {
       this.gameStarted = true;
