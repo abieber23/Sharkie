@@ -136,18 +136,18 @@ function holdButton(btn, onDown, onUp = () => {}) {
   if (!btn) return;
 
   // Maus
-  btn.addEventListener("mousedown", (e) => {
-    e.preventDefault();
-    onDown();
-  });
-  btn.addEventListener("mouseup", (e) => {
-    e.preventDefault();
-    onUp();
-  });
-  btn.addEventListener("mouseleave", (e) => {
-    e.preventDefault();
-    onUp();
-  });
+  // btn.addEventListener("mousedown", (e) => {
+  //   e.preventDefault();
+  //   onDown();
+  // });
+  // btn.addEventListener("mouseup", (e) => {
+  //   e.preventDefault();
+  //   onUp();
+  // });
+  // btn.addEventListener("mouseleave", (e) => {
+  //   e.preventDefault();
+  //   onUp();
+  // });
 
   // Touch
   btn.addEventListener(
@@ -214,12 +214,10 @@ function isMobileDevice() {
 /**
  * Shows or hides mobile controls based on device detection.
  */
-  function updateMobileControls() {
-    if (isMobileDevice()) {
-        mobileControls.style.display = "block";
-    } else {
-        mobileControls.style.display = "none";
-    }
+function updateMobileControls() {
+  const isMobile = isMobileDevice();
+  mobileControls.style.display = isMobile ? "block" : "none";
+  document.documentElement.classList.toggle("is-mobile", isMobile);
 }
 
 window.addEventListener("resize", updateMobileControls);

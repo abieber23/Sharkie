@@ -250,14 +250,43 @@ text-align: right;
 
 #btn-pause {
   left: 20px;
-  bottom: 90%;
+  bottom: 85%;
 }
 
 
+@media (max-height: 350px) {
 
+.menu-icon {
+  margin: 5px !important
+}
+
+#mobile-menu {
+padding: 5px !important;
+}
+}
 
 @media only screen and (max-height: 580px) {
 
+  body {
+    margin:0%;
+
+  }
+.moveset{
+  padding-bottom: 0;
+}
+
+#modal-window {
+  height: auto;
+  padding-top: 0%;
+  padding-bottom: 0;
+}
+
+#modal-window h2 {
+  display: none;
+}
+  .buttons{
+    margin: 0;
+  }
 
   #game-wrapper{
     height: 100vh;
@@ -294,6 +323,10 @@ text-align: right;
   border-radius: 28px;
 }
 
+.is-mobile .mobile-menu-icon {
+  display: block;
+}
+
 /* Menübox */
 #mobile-menu {
   display: none;
@@ -324,18 +357,10 @@ text-align: right;
   margin-top: 10px;
 }
 
-/* MOBILE ONLY */
-@media (max-width: 900px) {
-  .mobile-menu-icon {
-      display: block;
-  }
-
- 
-  .mute-button,
-  #loud,
-  footer,
-  .fullscreen-button,
-  .instructions-btn {
-      display: none !important;
-  }
+.is-mobile .mute-button,
+.is-mobile #loud,
+.is-mobile footer,
+.is-mobile .fullscreen-button,
+.is-mobile .instructions-btn {
+    display: none !important;
 }
